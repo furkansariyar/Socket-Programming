@@ -6,7 +6,7 @@ public class Server implements Runnable {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
-
+/*
     public Server() {
     }
 
@@ -42,7 +42,7 @@ public class Server implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 /*    public static void main(String[] args) {
         System.out.println("Server opened");
@@ -53,6 +53,6 @@ public class Server implements Runnable {
     @Override
     public void run() {
         System.out.println("Server is opening...");
-        start(6666);
+        //start(6666);
     }
 }

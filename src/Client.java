@@ -19,15 +19,28 @@ public class Client {
         }
     }
 
-    public String sendMessage(String msg) {
-        out.println(msg);
+    public String sendMessage(TripDetail tripDetail) {
+
+        String message = String.valueOf(tripDetail.numberOfTravellers)+"\r\n" +
+                tripDetail.preferredAirlines.get(0)+"\r\n" +
+                tripDetail.preferredHotels.get(0)+"\r\n";
+
+        out.println(message); // Sending message to Travel Agency server
+
         String resp = null;
-        try {
-            resp = in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return resp;
+        String response = "";
+        do {
+            try {
+                resp = in.readLine();
+                if(!resp.isEmpty()) {
+                    response += resp+"\r\n";
+                    System.out.println("------- " + resp);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } while (resp!=null && !resp.isEmpty());
+        return response;
     }
 
     public void stopConnection() {
