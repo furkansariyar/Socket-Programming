@@ -22,8 +22,8 @@ public class Client {
     public String sendMessage(TripDetail tripDetail) {
 
         String message = String.valueOf(tripDetail.numberOfTravellers)+"\r\n" +
-                tripDetail.preferredAirlines.get(0)+"\r\n" +
-                tripDetail.preferredHotels.get(0)+"\r\n";
+                tripDetail.preferredAirline+"\r\n" +
+                tripDetail.preferredHotel+"\r\n";
 
         out.println(message); // Sending message to Travel Agency server
 

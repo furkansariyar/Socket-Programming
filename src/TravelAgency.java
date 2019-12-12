@@ -23,20 +23,28 @@ public class TravelAgency implements Runnable {
         System.out.println("Server opened!\n");
         try {
             serverSocket = new ServerSocket(port);
-            clientSocket = serverSocket.accept();
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-            String inputLine;
-            String response="";
-            while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
-                response+=inputLine+"\r\n";
-                System.out.println("******* " + inputLine);
-            }
-            out.println(response);
-
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        while(true) {
+            try {
+                clientSocket = serverSocket.accept();
+
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+
+                String inputLine;
+                String response="";
+                while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
+                    response+=inputLine+"\r\n";
+                    System.out.println("******* " + inputLine);
+                }
+                out.println(response);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -3,13 +3,12 @@ import java.util.ArrayList;
 public class TripDetail {
 
     int numberOfTravellers;
-    ArrayList<String> preferredAirlines = new ArrayList<String>();
-    ArrayList<String> preferredHotels = new ArrayList<String>();
+    String preferredAirline, preferredHotel;
 
-    public TripDetail(int numberOfTravellers, ArrayList<String> preferredAirlines, ArrayList<String> preferredHotels) {
+    public TripDetail(int numberOfTravellers, String preferredAirline, String preferredHotel) {
         this.numberOfTravellers = numberOfTravellers;
-        this.preferredAirlines = preferredAirlines;
-        this.preferredHotels = preferredHotels;
+        this.preferredAirline = preferredAirline;
+        this.preferredHotel = preferredHotel;
     }
 
     public int getNumberOfTravellers() {
@@ -20,28 +19,28 @@ public class TripDetail {
         this.numberOfTravellers = numberOfTravellers;
     }
 
-    public ArrayList<String> getPreferredAirlines() {
-        return preferredAirlines;
+    public String getPreferredAirline() {
+        return preferredAirline;
     }
 
-    public void setPreferredAirlines(ArrayList<String> preferredAirlines) {
-        this.preferredAirlines = preferredAirlines;
+    public void setPreferredAirline(String preferredAirline) {
+        this.preferredAirline = preferredAirline;
     }
 
-    public ArrayList<String> getPreferredHotels() {
-        return preferredHotels;
+    public String getPreferredHotel() {
+        return preferredHotel;
     }
 
-    public void setPreferredHotels(ArrayList<String> preferredHotels) {
-        this.preferredHotels = preferredHotels;
+    public void setPreferredHotel(String preferredHotel) {
+        this.preferredHotel = preferredHotel;
     }
 
     @Override
     public String toString() {
         return "TripDetail{" +
                 "numberOfTravellers=" + numberOfTravellers +
-                ", preferredAirlines=" + preferredAirlines +
-                ", preferredHotels=" + preferredHotels +
+                ", preferredAirline='" + preferredAirline + '\'' +
+                ", preferredHotel='" + preferredHotel + '\'' +
                 '}';
     }
 }
