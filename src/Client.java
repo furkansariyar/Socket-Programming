@@ -8,6 +8,7 @@ public class Client {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
+    private boolean firstLoginFlag;
 
     public void startConnection(String ip, int port) {
         try {
@@ -25,7 +26,14 @@ public class Client {
                 tripDetail.preferredAirline+"\r\n" +
                 tripDetail.preferredHotel+"\r\n";
 
+        out.println("NEW-PROTOCOL/1.1");
+        out.println("Accept: text/html");
+        out.println("Accept-Language: en-US");
+        if (this.firstLoginFlag) {
+            out.println("First-Login: " + this.firstLoginFlag);
+        }
         out.println(message); // Sending message to Travel Agency server
+        out.println();
 
         String resp = null;
         String response = "";
@@ -51,5 +59,13 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isFirstLoginFlag() {
+        return this.firstLoginFlag;
+    }
+
+    public void setFirstLoginFlag(boolean firstLoginFlag) {
+        this.firstLoginFlag = firstLoginFlag;
     }
 }

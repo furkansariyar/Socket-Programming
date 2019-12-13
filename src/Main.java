@@ -12,11 +12,16 @@ public class Main {
     public static void createClient() {
         Client client = new Client();
         client.startConnection("127.0.0.1", 6666);
+        client.setFirstLoginFlag(true);
+        //TODO: get all hotels and airplanes
 
+
+        //client.setFirstLoginFlag(false);
         // TODO: müşteri istediği otel havayolu şirketi vs travel agency ye bildirir.
         int numberOfTravellers=1;
         String preferredAirline="airline-1";
         String preferredHotel="hotel-1";
+
 
 
         TripDetail tripDetail = new TripDetail(numberOfTravellers, preferredAirline, preferredHotel);

@@ -1,3 +1,2 @@
-Test
-test2
-suvasotel
+1---suvas otel
+2---otel erzincan

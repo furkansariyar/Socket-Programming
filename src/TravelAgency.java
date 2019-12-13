@@ -1,9 +1,7 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class TravelAgency implements Runnable {
 
@@ -15,6 +13,11 @@ public class TravelAgency implements Runnable {
     private Socket clientSocket;
     private PrintWriter out;
     private BufferedReader in;
+
+    private HashMap<Integer, String> hotels;
+    private HashMap<Integer, String> airlines;
+    private boolean firstLoginFlag;
+
 
     public TravelAgency() {
     }
@@ -33,14 +36,33 @@ public class TravelAgency implements Runnable {
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-
+                this.firstLoginFlag=false;
                 String inputLine;
                 String response="";
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     response+=inputLine+"\r\n";
                     System.out.println("******* " + inputLine);
+                    if (inputLine.equals("First-Login: true")) {
+                        //TODO: database den otel ve airplane lerin hepsini çek ve return et
+                        this.hotels=DatabaseController.readFile(new File("Hotels.txt")) ;
+                        this.airlines=DatabaseController.readFile(new File("Airlines.txt")) ;
+
+                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        System.out.println(hotels);
+                        System.out.println(airlines);
+                        this.firstLoginFlag=true;
+                    }
                 }
-                out.println(response);
+                if (!firstLoginFlag) {
+                    out.println(response);
+                }
+                else {
+                    //out.println(this.hotels.toString()+"\r\n"+this.airlines.toString()+"\r\n");
+                    out.println("Status-code: 200");
+                    out.println("Hotels: " + this.hotels.toString());
+                    out.println("Airlines: " + this.airlines.toString());
+                }
+
 
             } catch (IOException e) {
                 e.printStackTrace();

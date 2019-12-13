@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class DatabaseController {
@@ -8,7 +9,7 @@ public class DatabaseController {
     private ArrayList<String> hotels = new ArrayList<String>();
 
     public DatabaseController(TripDetail tripDetail) {
-        hotels=readFile(hotelsFile);
+        //hotels=readFile(hotelsFile);
         System.out.println("*-*-*-*-*--*-* " + tripDetail);
         /*if (tripDetail.preferredHotels.get(0)==hotels.get(0)) {
             System.out.println("---****----***");
@@ -36,21 +37,23 @@ public class DatabaseController {
         }
     }
 
-    public static ArrayList<String> readFile(File file) {
-        ArrayList<String> list = new ArrayList<String>();
+    public static HashMap<Integer, String> readFile(File file) {
+        HashMap<Integer, String> data = new HashMap<Integer, String>();
         try {
             Scanner myReader = new Scanner(file);
             while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                System.out.println(data);
-                list.add(data);
+                String line = myReader.nextLine();
+                //System.out.println(line);
+
+                String[] separatedLine = line.split("---", 2);
+                data.put(Integer.valueOf(separatedLine[0]), separatedLine[1]);
             }
             myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        return list;
+        return data;
     }
 
     public static void updateFile(File fileName, String newData) {
