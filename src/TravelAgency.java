@@ -29,40 +29,44 @@ public class TravelAgency implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        getRequest();
+    }
+
+    public void getRequest() {
         while(true) {
             try {
                 clientSocket = serverSocket.accept();
-
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                this.firstLoginFlag=false;
+                //this.firstLoginFlag=false;
                 String inputLine;
                 String response="";
+
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     response+=inputLine+"\r\n";
                     System.out.println("******* " + inputLine);
                     if (inputLine.equals("First-Login: true")) {
-                        //TODO: database den otel ve airplane lerin hepsini çek ve return et
+                        // get all hotels and airlines from db, and put them in response
                         this.hotels=DatabaseController.readFile(new File("Hotels.txt")) ;
                         this.airlines=DatabaseController.readFile(new File("Airlines.txt")) ;
-
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        System.out.println(hotels);
-                        System.out.println(airlines);
+                        response += "Hotels: " + this.hotels.toString() + "\r\n" +
+                                "Airlines: " + this.airlines.toString() + "\r\n";
                         this.firstLoginFlag=true;
+                        break;
+                    }
+                    else if (inputLine.equals("First-Login: false")) {
+                        this.firstLoginFlag=false;
                     }
                 }
+                response += "Status-code: 200\r\n";
+
                 if (!firstLoginFlag) {
                     out.println(response);
                 }
                 else {
-                    //out.println(this.hotels.toString()+"\r\n"+this.airlines.toString()+"\r\n");
-                    out.println("Status-code: 200");
-                    out.println("Hotels: " + this.hotels.toString());
-                    out.println("Airlines: " + this.airlines.toString());
+                    out.println(response);
                 }
-
 
             } catch (IOException e) {
                 e.printStackTrace();

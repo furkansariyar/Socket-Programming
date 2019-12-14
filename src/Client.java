@@ -22,18 +22,20 @@ public class Client {
 
     public String sendMessage(TripDetail tripDetail) {
 
+
         String message = String.valueOf(tripDetail.numberOfTravellers)+"\r\n" +
                 tripDetail.preferredAirline+"\r\n" +
                 tripDetail.preferredHotel+"\r\n";
 
+        //System.out.println("###########");
+
         out.println("NEW-PROTOCOL/1.1");
         out.println("Accept: text/html");
         out.println("Accept-Language: en-US");
-        if (this.firstLoginFlag) {
-            out.println("First-Login: " + this.firstLoginFlag);
-        }
+        out.println("First-Login: " + String.valueOf(this.firstLoginFlag));
         out.println(message); // Sending message to Travel Agency server
         out.println();
+
 
         String resp = null;
         String response = "";
