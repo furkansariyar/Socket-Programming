@@ -1,10 +1,9 @@
 
 public class TripDetail {
 
-    int numberOfTravellers;
-    String preferredAirline, preferredHotel;
+    int numberOfTravellers, preferredAirline, preferredHotel;
 
-    public TripDetail(int numberOfTravellers, String preferredAirline, String preferredHotel) {
+    public TripDetail(int numberOfTravellers, int preferredAirline, int preferredHotel) {
         this.numberOfTravellers = numberOfTravellers;
         this.preferredAirline = preferredAirline;
         this.preferredHotel = preferredHotel;
@@ -18,19 +17,19 @@ public class TripDetail {
         this.numberOfTravellers = numberOfTravellers;
     }
 
-    public String getPreferredAirline() {
+    public int getPreferredAirline() {
         return preferredAirline;
     }
 
-    public void setPreferredAirline(String preferredAirline) {
+    public void setPreferredAirline(int preferredAirline) {
         this.preferredAirline = preferredAirline;
     }
 
-    public String getPreferredHotel() {
+    public int getPreferredHotel() {
         return preferredHotel;
     }
 
-    public void setPreferredHotel(String preferredHotel) {
+    public void setPreferredHotel(int preferredHotel) {
         this.preferredHotel = preferredHotel;
     }
 
@@ -38,8 +37,8 @@ public class TripDetail {
     public String toString() {
         return "TripDetail{" +
                 "numberOfTravellers=" + numberOfTravellers +
-                ", preferredAirline='" + preferredAirline + '\'' +
-                ", preferredHotel='" + preferredHotel + '\'' +
+                ", preferredAirline=" + preferredAirline +
+                ", preferredHotel=" + preferredHotel +
                 '}';
     }
 }

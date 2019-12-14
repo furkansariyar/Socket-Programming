@@ -44,7 +44,7 @@ public class Client {
                 resp = in.readLine();
                 if(!resp.isEmpty()) {
                     response += resp+"\r\n";
-                    System.out.println("------- " + resp);
+                    //System.out.println("------- " + resp);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

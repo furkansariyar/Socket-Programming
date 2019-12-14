@@ -45,8 +45,10 @@ public class TravelAgency implements Runnable {
 
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     response+=inputLine+"\r\n";
-                    System.out.println("******* " + inputLine);
+                    //System.out.println("******* " + inputLine);
                     if (inputLine.equals("First-Login: true")) {
+                        //todo: burası yanlış. otel ve airline db lerine buradan erişim sağlanamaz.
+                        //todo: tcp soketleri üzerinden http ile otel ve airline db lerine bağlanılacak.
                         // get all hotels and airlines from db, and put them in response
                         this.hotels=DatabaseController.readFile(new File("Hotels.txt")) ;
                         this.airlines=DatabaseController.readFile(new File("Airlines.txt")) ;
@@ -57,6 +59,7 @@ public class TravelAgency implements Runnable {
                     }
                     else if (inputLine.equals("First-Login: false")) {
                         this.firstLoginFlag=false;
+                        break;
                     }
                 }
                 response += "Status-code: 200\r\n";
