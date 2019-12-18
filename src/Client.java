@@ -9,6 +9,8 @@ public class Client {
     private PrintWriter out;
     private BufferedReader in;
     private boolean firstLoginFlag;
+    private String host="127.0.0.1";
+    // TODO: ports can be defined here
 
     public void startConnection(String ip, int port) {
         try {
@@ -30,6 +32,8 @@ public class Client {
         //System.out.println("###########");
 
         out.println("NEW-PROTOCOL/1.1");
+        out.println("Host: " + this.host);
+        out.println("User-Agent: Client");
         out.println("Accept: text/html");
         out.println("Accept-Language: en-US");
         out.println("First-Login: " + String.valueOf(this.firstLoginFlag));

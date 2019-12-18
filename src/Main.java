@@ -5,6 +5,8 @@ public class Main {
 
     private static TravelAgency server;
     private static Thread serverThread;
+    private static String host="127.0.0.1";
+    // TODO: ports can be defined here
 
     public static void main(String[] args) {
         startServer();
@@ -17,18 +19,18 @@ public class Main {
         int hotelID=0, airlineID=0;
 
         Client client = new Client();
-        client.startConnection("127.0.0.1", 6666);
+        client.startConnection(host, 6666);
         client.setFirstLoginFlag(true);
 
         // Get all hotels and airlines
-        System.out.println("Get All Hotels and Airlines");
+        //System.out.println("Get All Hotels and Airlines");
         String response=client.sendMessage(new TripDetail(0, 0, 0));
-        System.out.println("Server: \n" + response);
+        System.out.println("Server:\n" + response);
 
         client.stopConnection();
 
         String hotelsPart = response.substring(response.indexOf("Hotels: ")+9, response.indexOf("}"));
-        String airlinesPart = response.substring(response.indexOf("Airlines: ")+11, response.indexOf("Status-code")-3);
+        String airlinesPart = response.substring(response.indexOf("Airlines: ")+11, response.length()-3);
         HashMap<Integer, String> hotelsMap = new HashMap<Integer, String>();
         HashMap<Integer, String> airlinesMap = new HashMap<Integer, String>();
 
@@ -64,7 +66,7 @@ public class Main {
 
     public static void clientRequest(Client client, TripDetail tripDetail) {
         client.setFirstLoginFlag(false);
-        client.startConnection("127.0.0.1", 6666);
+        client.startConnection(host, 6666);
         System.out.println("Client: " + tripDetail.numberOfTravellers + " " + tripDetail.preferredAirline + " " + tripDetail.preferredHotel);
         String response2=client.sendMessage(tripDetail);
         System.out.println("Server: \n" + response2);
