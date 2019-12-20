@@ -23,11 +23,24 @@ public class GUI extends JFrame {
 
         JComboBox hotelComboBox=new JComboBox(hotelsMap.values().toArray());
         JComboBox airlineComboBox=new JComboBox(airlinesMap.values().toArray());
+
         hotelComboBox.setBounds(50, 50,90,20);
         airlineComboBox.setBounds(50, 50,90,20);
 
         jPanel.add(hotelComboBox);
         jPanel.add(airlineComboBox);
+
+        JLabel entranceDateLabel = new JLabel("Entrance Date: dd.mm.yyyy");
+        JTextField entranceDate = new JTextField(16);
+
+        jPanel.add(entranceDateLabel);
+        jPanel.add(entranceDate);
+
+        JLabel exitDateLabel = new JLabel("Exit Date: dd.mm.yyyy");
+        JTextField exitDate = new JTextField(16);
+
+        jPanel.add(exitDateLabel);
+        jPanel.add(exitDate);
 
         add(jPanel);
 

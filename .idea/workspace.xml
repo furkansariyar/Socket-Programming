@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83431e21-fb49-46a3-98f2-994b4b7429ec" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/BoxLayoutFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/AirlineController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/AirlineController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/DatabaseController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/DatabaseController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/HotelController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/HotelController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/TravelAgency.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/TravelAgency.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DatabaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DatabaseController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,7 +22,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
+            <state relative-caret-position="119">
               <caret line="37" column="19" selection-start-line="37" selection-start-column="19" selection-end-line="37" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -47,14 +34,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
+            <state relative-caret-position="256">
+              <caret line="41" column="32" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2272#2273#0" expanded="true" />
-                <element signature="e#2353#2354#0" expanded="true" />
-                <element signature="e#2418#2419#0" expanded="true" />
-                <element signature="e#2507#2508#0" expanded="true" />
+                <element signature="e#2672#2673#0" expanded="true" />
+                <element signature="e#2753#2754#0" expanded="true" />
+                <element signature="e#2818#2819#0" expanded="true" />
+                <element signature="e#2907#2908#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -185,6 +172,24 @@
             <path>
               <item name="Socket-Programming" type="b2602c69:ProjectViewProjectNode" />
               <item name="Socket-Programming" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Socket-Programming" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Socket-Programming" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Socket-Programming" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Socket-Programming" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="production" type="462c0819:PsiDirectoryNode" />
+              <item name="Socket-Programming" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Socket-Programming" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Socket-Programming" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -197,7 +202,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1576865948629" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1576866743749" />
     <property name="last.edited.regexp" value="Sample Text" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
@@ -315,7 +320,7 @@
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="5" weight="0.3289689" />
-      <window_info anchor="bottom" id="Messages" order="6" weight="0.32934782" />
+      <window_info active="true" anchor="bottom" id="Messages" order="6" visible="true" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3289689" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.3289689" />
@@ -457,16 +462,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="37" column="19" selection-start-line="37" selection-start-column="19" selection-end-line="37" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/BoxLayoutFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
@@ -488,16 +483,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GUI.java">
+    <entry file="file://$PROJECT_DIR$/out/production/Socket-Programming/BoxLayoutFrame.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
+        <state>
+          <folding>
+            <element signature="e#0#359#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="37" column="19" selection-start-line="37" selection-start-column="19" selection-end-line="37" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2272#2273#0" expanded="true" />
-            <element signature="e#2353#2354#0" expanded="true" />
-            <element signature="e#2418#2419#0" expanded="true" />
-            <element signature="e#2507#2508#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="41" column="32" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2672#2673#0" expanded="true" />
+            <element signature="e#2753#2754#0" expanded="true" />
+            <element signature="e#2818#2819#0" expanded="true" />
+            <element signature="e#2907#2908#0" expanded="true" />
           </folding>
         </state>
       </provider>
