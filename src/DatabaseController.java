@@ -84,6 +84,10 @@ public class DatabaseController {
         }
     }
 
+    public void getAllHotel(){
+
+    }
+
     /*public static void main(String[] args) {
         UpdateHotels();
     }*/

@@ -1,7 +1,11 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GUI {
+public class GUI extends JFrame {
     int hotelID, airlineID;
     HashMap<Integer, String> hotelsMap, airlinesMap;
 
@@ -12,21 +16,51 @@ public class GUI {
     }
 
     private void operation() {
-        // TODO: GUI operations
-        getIDFromString(); // if it is necessary
+        setLayout(new FlowLayout());
+
+        JPanel jPanel = new JPanel();
+        jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
+
+        JComboBox hotelComboBox=new JComboBox(hotelsMap.values().toArray());
+        JComboBox airlineComboBox=new JComboBox(airlinesMap.values().toArray());
+        hotelComboBox.setBounds(50, 50,90,20);
+        airlineComboBox.setBounds(50, 50,90,20);
+
+        jPanel.add(hotelComboBox);
+        jPanel.add(airlineComboBox);
+
+        add(jPanel);
+
+        setSize(400,400);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        BoxLayoutFrame boxLayoutFrame = new BoxLayoutFrame(hotelsMap, airlinesMap);
+
+        hotelComboBox.addActionListener (new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getHotelIDFromString(hotelComboBox.getSelectedItem().toString());
+            }
+        });
+
+        airlineComboBox.addActionListener (new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getAirlineIDFromString(airlineComboBox.getSelectedItem().toString());
+            }
+        });
     }
 
-    // Get ID of the hotel/airline from its text
-    private void getIDFromString() {
+    private void getHotelIDFromString(String hotel) {
         // Find id of the hotel
         for (Map.Entry<Integer, String> entry:this.hotelsMap.entrySet()) {
-            if (entry.getValue().equals("otel erzincan")) {
+            if (entry.getValue().equals(hotel)) {
                 this.hotelID=entry.getKey();
             }
         }
-        // Find id of the airline
+    }
+
+    private void getAirlineIDFromString(String airline) {
         for (Map.Entry<Integer, String> entry:this.airlinesMap.entrySet()) {
-            if (entry.getValue().equals("erzincan turizm")) {
+            if (entry.getValue().equals(airline)) {
                 this.airlineID=entry.getKey();
             }
         }
