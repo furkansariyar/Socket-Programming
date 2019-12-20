@@ -19,7 +19,7 @@ public class Main {
         int hotelID=0, airlineID=0;
 
         Client client = new Client();
-        client.startConnection(host, 6666);
+        client.startConnection(host, 8070);
         client.setFirstLoginFlag(true);
 
         // Get all hotels and airlines
@@ -40,23 +40,9 @@ public class Main {
         airlinesMap.put(1, airlinesPart.substring(2, airlinesPart.indexOf(",")));
         airlinesMap.put(2, airlinesPart.substring(airlinesPart.indexOf("2")+2, airlinesPart.length()));
 
-        // TODO: müşteri istediği otel havayolu şirketi vs seçecek gui üzerinden
-        // todo: guiden gelecek bu cevaplar
-        String hotel_answer="otel erzincan";
-        String airline_answer="erzincan turizm";
-
-        // Find id of the airline
-        for (Map.Entry<Integer, String> entry:airlinesMap.entrySet()) {
-            if (entry.getValue().equals(airline_answer)) {
-                airlineID=entry.getKey();
-            }
-        }
-        // Find id of the hotel
-        for (Map.Entry<Integer, String> entry:hotelsMap.entrySet()) {
-            if (entry.getValue().equals(hotel_answer)) {
-                hotelID=entry.getKey();
-            }
-        }
+        GUI gui = new GUI(hotelsMap, airlinesMap);
+        hotelID=gui.getHotelID();
+        airlineID=gui.getAirlineID();
 
         TripDetail tripDetail = new TripDetail(1, airlineID, hotelID);
         clientRequest(client, tripDetail);
@@ -66,7 +52,7 @@ public class Main {
 
     public static void clientRequest(Client client, TripDetail tripDetail) {
         client.setFirstLoginFlag(false);
-        client.startConnection(host, 6666);
+        client.startConnection(host, 8070);
         System.out.println("Client: " + tripDetail.numberOfTravellers + " " + tripDetail.preferredAirline + " " + tripDetail.preferredHotel);
         String response2=client.sendMessage(tripDetail);
         System.out.println("Server: \n" + response2);

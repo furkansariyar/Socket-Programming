@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
-import java.util.HashMap;
 
 public class TravelAgency implements Runnable {
 
@@ -11,9 +10,9 @@ public class TravelAgency implements Runnable {
      * */
 
     private ServerSocket serverSocket;
-    private Socket clientSocket,agencySocket;
-    private PrintWriter out,out2;
-    private BufferedReader in,in2;
+    private Socket clientSocket, agencySocket_Hotel, agencySocket_Airline;
+    private PrintWriter out, out2, out3;
+    private BufferedReader in, in2, in3;
 
 /*    private HashMap<Integer, String> hotels;
     private HashMap<Integer, String> airlines;*/
@@ -22,7 +21,8 @@ public class TravelAgency implements Runnable {
     // TODO: ports can be defined here
 
     private static HotelController hotelServer;
-    private static Thread hotelServerThread;
+    private static AirlineController airlineServer;
+    private static Thread hotelServerThread, airlineServerThread;
 
     String hotelsPart="", airlinesPart="";
 
@@ -42,20 +42,23 @@ public class TravelAgency implements Runnable {
 
     public void startClientConnection() {
         try {
-            agencySocket = new Socket(this.host, 6667);
-            out2 = new PrintWriter(agencySocket.getOutputStream(), true);
-            in2 = new BufferedReader(new InputStreamReader(agencySocket.getInputStream()));
+            // Hotel Socket
+            agencySocket_Hotel = new Socket(this.host, 8080);
+            out2 = new PrintWriter(agencySocket_Hotel.getOutputStream(), true);
+            in2 = new BufferedReader(new InputStreamReader(agencySocket_Hotel.getInputStream()));
+
+            // Airline Socket
+            agencySocket_Airline = new Socket(this.host, 8090);
+            out3 = new PrintWriter(agencySocket_Airline.getOutputStream(), true);
+            in3 = new BufferedReader(new InputStreamReader(agencySocket_Airline.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //getRequest();
     }
 
     public void sendInitialMessage() {
         try {
-            //out2.println("############# initial message\r\n"); // todo: http request
-
-            out2.println("GET " + "/getAllHotelsAndAirlines" + " HTTP/1.1");
+            out2.println("GET " + "/getAllHotels" + " HTTP/1.1");
             out2.println("Host: " + this.host);
             out2.println("User-Agent: Travel Agency");
             out2.println("Accept: text/html");
@@ -63,16 +66,32 @@ public class TravelAgency implements Runnable {
             out2.println("Connection: close");
             out2.println();
 
-            String inputLine;
-            String response="";
-            while ((inputLine=in2.readLine()) != null && !inputLine.isEmpty()) {
-                response+=inputLine+"\r\n";
-            }
-            System.out.println(response);    // Displaying HTTP response content
+            out3.println("GET " + "/getAllAirlines" + " HTTP/1.1");
+            out3.println("Host: " + this.host);
+            out3.println("User-Agent: Travel Agency");
+            out3.println("Accept: text/html");
+            out3.println("Accept-Language: en-US");
+            out3.println("Connection: close");
+            out3.println();
 
-            if (response.contains("Hotels:")) {
-                this.hotelsPart = response.substring(response.indexOf("Hotels: ")+8, response.indexOf("}")+1);
-                this.airlinesPart = response.substring(response.indexOf("Airlines: ")+10, response.length()-2);
+            String inputLineHotel, inputLineAirline;
+            String responseHotel="", responseAirline="";
+            while ((inputLineHotel=in2.readLine()) != null && !inputLineHotel.isEmpty()) {
+                responseHotel+=inputLineHotel+"\r\n";
+            }
+            System.out.println(responseHotel);    // Displaying HTTP response content
+
+            while ((inputLineAirline=in3.readLine()) != null && !inputLineAirline.isEmpty()) {
+                responseAirline+=inputLineAirline+"\r\n";
+            }
+            System.out.println(responseAirline);    // Displaying HTTP response content
+
+            if (responseHotel.contains("Hotels:")) {
+                this.hotelsPart = responseHotel.substring(responseHotel.indexOf("Hotels: ")+8, responseHotel.indexOf("}")+1);
+            }
+
+            if (responseAirline.contains("Airlines:")) {
+                this.airlinesPart = responseAirline.substring(responseAirline.indexOf("Airlines: ")+10, responseAirline.indexOf("}")+1);
             }
 
         } catch (IOException e) {
@@ -132,6 +151,7 @@ public class TravelAgency implements Runnable {
     public void stop() {
         try {
             System.out.println("\nServer closed");
+            stopClientConnection(); // Closing client connection too.
             in.close();
             out.close();
             clientSocket.close();
@@ -143,9 +163,14 @@ public class TravelAgency implements Runnable {
 
     public void stopClientConnection() {
         try {
+            // Close Hotel Socket
             in2.close();
             out2.close();
-            agencySocket.close();
+            agencySocket_Hotel.close();
+            // Close Airline Socket
+            in3.close();
+            out3.close();
+            agencySocket_Airline.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -155,13 +180,20 @@ public class TravelAgency implements Runnable {
     public void run() {
         System.out.println("Server is opening...");
         startHotelServer();
-        start(6666);
+        startAirlineServer();
+        start(8070);
     }
 
     public void startHotelServer() {
         hotelServer = new HotelController();
         hotelServerThread = new Thread(hotelServer);
         hotelServerThread.start();
+    }
+
+    public void startAirlineServer() {
+        airlineServer = new AirlineController();
+        airlineServerThread = new Thread(airlineServer);
+        airlineServerThread.start();
     }
 
 }

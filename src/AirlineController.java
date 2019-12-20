@@ -1,10 +1,10 @@
-import java.net.*;
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Date;
 
-public class HotelController implements Runnable{
-
-    private ServerSocket hotelSocket;
+public class AirlineController implements Runnable{
+    private ServerSocket airlineSocket;
     private Socket agencySocket;
     private PrintWriter out;
     private BufferedReader in;
@@ -12,13 +12,13 @@ public class HotelController implements Runnable{
     private String host="127.0.0.1";
     // TODO: ports can be defined here
 
-    public HotelController() {
+    public AirlineController() {
     }
 
     public void start(int port) {
-        System.out.println("Hotel server opened!\n");
+        System.out.println("Airline server opened!\n");
         try {
-            hotelSocket = new ServerSocket(port);
+            airlineSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,7 +28,7 @@ public class HotelController implements Runnable{
     public void getRequest() {
         while (true) {
             try {
-                agencySocket = hotelSocket.accept();
+                agencySocket = airlineSocket.accept();
                 out = new PrintWriter(agencySocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(agencySocket.getInputStream()));
 
@@ -41,9 +41,9 @@ public class HotelController implements Runnable{
                 System.out.println(request);    // Displaying HTTP request content
 
                 String requestType = request.substring(request.indexOf(" /")+2, request.indexOf(" HTTP"));
-                if (requestType.equals("getAllHotels")) {
-                    response += "Hotels: " +String.valueOf(DatabaseController.readFile(new File("Hotels.txt"))) + "\r\n";
-                    //response += "Airlines: " +String.valueOf(DatabaseController.readFile(new File("Airlines.txt"))) + "\r\n";
+                if (requestType.equals("getAllAirlines")) {
+                    //response += "Hotels: " +String.valueOf(DatabaseController.readFile(new File("Hotels.txt"))) + "\r\n";
+                    response += "Airlines: " +String.valueOf(DatabaseController.readFile(new File("Airlines.txt"))) + "\r\n";
                 }
                 else {
                     //todo: trip detail request i buraya gelecek
@@ -51,7 +51,7 @@ public class HotelController implements Runnable{
 
                 out.println("HTTP/1.1 200 OK");
                 out.println("Date: " + new Date());
-                out.println("Server: Hotel Controller");
+                out.println("Server: Airline Controller");
                 out.println("Connection: close");
                 out.println(response);
 
@@ -67,7 +67,7 @@ public class HotelController implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Hotel server is opening...");
-        start(8080);
+        System.out.println("Airline server is opening...");
+        start(8090);
     }
 }
