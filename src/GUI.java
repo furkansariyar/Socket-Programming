@@ -2,11 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GUI extends JFrame {
     int hotelID, airlineID;
+    String dateStart, dateEnd;
     HashMap<Integer, String> hotelsMap, airlinesMap;
 
     public GUI(HashMap<Integer, String> hotelsMap, HashMap<Integer, String> airlinesMap) {
@@ -58,6 +61,8 @@ public class GUI extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
+
         hotelComboBox.addActionListener (new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getHotelIDFromString(hotelComboBox.getSelectedItem().toString());
@@ -73,9 +78,34 @@ public class GUI extends JFrame {
         tripSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Main.createClient();
+                if (dateCheck(entranceDate.getText()) && dateCheck(exitDate.getText())){
+                    dateStart = entranceDate.getText();
+                    dateEnd = exitDate.getText();
+                    Main.createClient();
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Entered a invalid date for!", "InfoBox: " + "INVALID DATE", JOptionPane.ERROR_MESSAGE);
+                }
+
+
+
             }
         });
+    }
+
+    private boolean dateCheck(String date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        dateFormat.setLenient(false);
+        try
+        {
+            dateFormat.parse(date);
+        }
+        /* Date format is invalid */
+        catch (ParseException e)
+        {
+            return false;
+        }
+        return true;
     }
 
     private void getHotelIDFromString(String hotel) {
@@ -107,8 +137,24 @@ public class GUI extends JFrame {
         return airlineID;
     }
 
-    public void setAirlineID(int airlineID) {
+    public void setAirlineIDID(int airlineID) {
         this.airlineID = airlineID;
+    }
+
+    public String getDateStart() {
+        return dateStart;
+    }
+
+    public void setDateStart(String dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public String getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd(String dateEnd) {
+        this.dateEnd = dateEnd;
     }
 
     @Override

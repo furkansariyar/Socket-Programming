@@ -12,11 +12,12 @@ public class Main {
     public static void main(String[] args) {
         startServer();
         createClient();
-        createClient();
+        //createClient();
     }
 
     public static void createClient() {
         int hotelID=0, airlineID=0;
+        String dateStart, dateEnd;
 
         Client client = new Client();
         client.startConnection(host, 8070);
@@ -43,12 +44,16 @@ public class Main {
         GUI gui = new GUI(hotelsMap, airlinesMap);
         hotelID=gui.getHotelID();
         airlineID=gui.getAirlineID();
+        dateStart=gui.getDateStart();
+        dateEnd=gui.getDateEnd();
 
         //todo: BU KALICI DEĞİL
         hotelID=1;
         airlineID=1;
+        dateStart="18.12.2019";
+        dateEnd="19.12.2019";
 
-        TripDetail tripDetail = new TripDetail(1, airlineID, hotelID, "18.12.2019", "19.12.2019");
+        TripDetail tripDetail = new TripDetail(1, airlineID, hotelID, dateStart, dateEnd);
         clientRequest(client, tripDetail);
 
         //server.stop();
