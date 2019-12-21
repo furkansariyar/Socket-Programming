@@ -30,6 +30,12 @@ public class GUI extends JFrame {
         jPanel.add(hotelComboBox);
         jPanel.add(airlineComboBox);
 
+        JLabel numberOfTravellersLabel = new JLabel("Number of Travellers");
+        JTextField numberOfTravellersField = new JTextField(16);
+
+        jPanel.add(numberOfTravellersLabel);
+        jPanel.add(numberOfTravellersField);
+
         JLabel entranceDateLabel = new JLabel("Entrance Date: dd.mm.yyyy");
         JTextField entranceDate = new JTextField(16);
 
@@ -44,7 +50,6 @@ public class GUI extends JFrame {
 
         JButton tripSearchButton = new JButton();
         tripSearchButton.setText("TRIP SEARCH");
-
         jPanel.add(tripSearchButton);
 
         add(jPanel);

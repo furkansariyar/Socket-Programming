@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83431e21-fb49-46a3-98f2-994b4b7429ec" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/GUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/GUI$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/GUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Socket-Programming/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Socket-Programming/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
+            <state relative-caret-position="269">
+              <caret line="26" column="55" selection-start-line="26" selection-start-column="55" selection-end-line="26" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -38,14 +32,35 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GUI.java">
+        <entry file="file://$PROJECT_DIR$/src/TripDetail.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="70" column="36" selection-start-line="70" selection-start-column="36" selection-end-line="70" selection-end-column="36" />
+            <state relative-caret-position="170">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="158">
+              <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2255#2256#0" expanded="true" />
-                <element signature="e#2306#2307#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/GUI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2412#2413#0" expanded="true" />
+                <element signature="e#2463#2464#0" expanded="true" />
                 <element signature="e#2635#2636#0" expanded="true" />
                 <element signature="e#2665#2666#0" expanded="true" />
                 <element signature="e#2708#2709#0" expanded="true" />
@@ -150,8 +165,8 @@
         <option value="$PROJECT_DIR$/src/DatabaseController.java" />
         <option value="$PROJECT_DIR$/src/BoxLayout.java" />
         <option value="$PROJECT_DIR$/src/BoxLayoutFrame.java" />
-        <option value="$PROJECT_DIR$/src/GUI.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
+        <option value="$PROJECT_DIR$/src/GUI.java" />
       </list>
     </option>
   </component>
@@ -214,7 +229,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1576927672249" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1576930030619" />
     <property name="last.edited.regexp" value="Sample Text" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
@@ -389,23 +404,6 @@
     <entry file="file://$PROJECT_DIR$/src/resources/Hotels.txt" />
     <entry file="file://$PROJECT_DIR$/filename.txt" />
     <entry file="file://$PROJECT_DIR$/src/Server.java" />
-    <entry file="file://$PROJECT_DIR$/src/TripDetail.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="36" column="18" selection-start-line="36" selection-start-column="18" selection-end-line="36" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="41" selection-start-line="41" selection-end-line="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Hotels.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -504,14 +502,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GUI.java">
+    <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="70" column="36" selection-start-line="70" selection-start-column="36" selection-end-line="70" selection-end-column="36" />
+        <state relative-caret-position="158">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2255#2256#0" expanded="true" />
-            <element signature="e#2306#2307#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="26" column="55" selection-start-line="26" selection-start-column="55" selection-end-line="26" selection-end-column="55" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TripDetail.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="36" column="42" selection-start-line="36" selection-start-column="42" selection-end-line="36" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2412#2413#0" expanded="true" />
+            <element signature="e#2463#2464#0" expanded="true" />
             <element signature="e#2635#2636#0" expanded="true" />
             <element signature="e#2665#2666#0" expanded="true" />
             <element signature="e#2708#2709#0" expanded="true" />
@@ -520,16 +545,6 @@
             <element signature="e#2811#2812#0" expanded="true" />
             <element signature="e#2858#2859#0" expanded="true" />
             <element signature="e#2900#2901#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
