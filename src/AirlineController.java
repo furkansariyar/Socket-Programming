@@ -1,7 +1,9 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class AirlineController implements Runnable{
     private ServerSocket airlineSocket;
@@ -35,6 +37,8 @@ public class AirlineController implements Runnable{
                 String inputLine;
                 String request="";
                 String response="";
+                String data="";
+                boolean checkAirlineFlag=false;
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     request+=inputLine+"\r\n";
                 }
@@ -42,12 +46,41 @@ public class AirlineController implements Runnable{
 
                 String requestType = request.substring(request.indexOf(" /")+2, request.indexOf(" HTTP"));
                 if (requestType.equals("getAllAirlines")) {
-                    //response += "Hotels: " +String.valueOf(DatabaseController.readFile(new File("Hotels.txt"))) + "\r\n";
                     response += "Airlines: " +String.valueOf(DatabaseController.readFile(new File("Airlines.txt"))) + "\r\n";
                 }
-                else {
-                    //todo: trip detail request i buraya gelecek
-                    //response+="FURKAN\r\n";
+                else if (requestType.equals("checkAirlineSituation")) {
+                    checkAirlineFlag=true;
+                }
+                else { }
+
+                if (checkAirlineFlag) {
+                    ArrayList<Integer> airlineIDs = new ArrayList<Integer>();
+                    data=request.substring(request.indexOf("AirlineID"), request.length()-2);
+                    int airlineID=Integer.parseInt(data.substring(data.indexOf("AirlineID:")+11, data.indexOf("Target-HotelID:")-2));
+                    airlineIDs=checkAirline(data);
+
+                    if (airlineIDs.size()==0) {
+                        // No available airline
+                        response += "Airline-ID: " + 0 + "\r\n";
+                        response += "Airline-Suggestion: false\r\n";
+                    }
+                    else if (airlineIDs.size()==1){
+                        if (airlineID==airlineIDs.get(0)) {
+                            // Requested airline is okay
+                            response += "Airline-ID: " + airlineID + "\r\n";
+                            response += "Airline-Suggestion: false\r\n";
+                        }
+                        else {
+                            // Suggested airline. Just one
+                            response += "Airline-ID: " + airlineIDs.get(0) + "\r\n";
+                            response += "Airline-Suggestion: true\r\n";
+                        }
+                    }
+                    else {
+                        // Suggested airlines. More than one
+                        response += "Airline-IDs: " + airlineIDs + "\r\n";
+                        response += "Airline-Suggestion: true\r\n";
+                    }
                 }
 
                 out.println("HTTP/1.1 200 OK");
@@ -64,6 +97,66 @@ public class AirlineController implements Runnable{
                 e.printStackTrace();
             }
         }
+    }
+
+    private ArrayList<Integer> checkAirline(String request) {
+        HashMap<Integer, HashMap> data;
+        HashMap<Integer, String> airlines;
+        ArrayList<String> dates = new ArrayList<String>();
+        int airlineID=Integer.parseInt(request.substring(request.indexOf("AirlineID:")+11, request.indexOf("Target-HotelID:")-2));
+        int hotelID=Integer.parseInt(request.substring(request.indexOf("Target-HotelID:")+16, request.indexOf("Traveller-Count:")-2));
+        int numberOfTraveller=Integer.parseInt(request.substring(request.indexOf("Traveller-Count:")+17, request.indexOf("Date-Start")-2));
+        String dateStart=request.substring(request.indexOf("Date-Start:")+12, request.indexOf("Date-End:")-2);
+        String dateEnd=request.substring(request.indexOf("Date-End:")+10, request.length());
+        boolean airlineStatusFlag=true;
+        ArrayList<Integer> airlineIDs = new ArrayList<Integer>();
+
+        dates.add(dateStart);   // date of departure
+        dates.add(dateEnd);     // date of arrival
+
+        data = DatabaseController.readDetailFile(new File("AirlineDetail_"+airlineID+".txt"));
+        airlineStatusFlag=checkTargetAndDates(dates, data, numberOfTraveller, hotelID);
+
+        if (airlineStatusFlag) {
+            airlineIDs.add(airlineID);
+            return airlineIDs;
+        }
+        else {
+            int alternativeAirlineID=1;
+            airlines=DatabaseController.readFile(new File("Airlines.txt"));
+            while (!airlineStatusFlag && alternativeAirlineID<=airlines.size()) {
+                if (alternativeAirlineID!=airlineID) {
+                    data = DatabaseController.readDetailFile(new File("AirlineDetail_"+alternativeAirlineID+".txt"));
+                    if (airlineStatusFlag=checkTargetAndDates(dates, data, numberOfTraveller, hotelID)) {
+                        airlineIDs.add(alternativeAirlineID);
+                    }
+                }
+                alternativeAirlineID++;
+            }
+            return airlineIDs;
+        }
+    }
+
+    private boolean checkTargetAndDates(ArrayList <String> dates, HashMap<Integer, HashMap> data, int numberOfTraveller, int hotelID) {
+        int freeSeat;
+        boolean airlineStatusFlag=true;
+        for (String date: dates) {
+            for (int i:data.keySet()) {
+                if (date.equals(data.get(i).get("Date")) && Integer.parseInt((String) data.get(i).get("Target"))==hotelID) {
+                    freeSeat=Integer.parseInt((String) data.get(i).get("Capacity")) - Integer.parseInt((String) data.get(i).get("Engaged"));
+                    if (numberOfTraveller > freeSeat) {
+                        airlineStatusFlag=false; // not enough free seat in airline
+                    }
+                    else {
+                        airlineStatusFlag=true;
+                    }
+                }
+                else {
+                    airlineStatusFlag=false;
+                }
+            }
+        }
+        return airlineStatusFlag;
     }
 
     @Override

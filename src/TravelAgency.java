@@ -118,6 +118,7 @@ public class TravelAgency implements Runnable {
             out3.println("Accept-Language: en-US");
             out3.println("Connection: close");
             out3.println("AirlineID: " + airlineID);
+            out3.println("Target-HotelID: " + hotelID);
             out3.println("Traveller-Count: " + numberOfTravellers);
             out3.println("Date-Start: " + dateStart);
             out3.println("Date-End: " + dateEnd);
@@ -143,6 +144,26 @@ public class TravelAgency implements Runnable {
                 this.airlinesPart = responseAirline.substring(responseAirline.indexOf("Airlines: ")+10, responseAirline.indexOf("}")+1);
             }
 
+            if (responseHotel.contains("Hotel-ID:")) {
+                this.hotelsPart = "Hotel-ID: " + responseHotel.substring(responseHotel.indexOf("Hotel-ID: ")+10, responseHotel.indexOf("Hotel-Suggestion:")-2) + "\r\n";
+                this.hotelsPart += "Hotel-Suggestion: " + responseHotel.substring(responseHotel.indexOf("Hotel-Suggestion: ")+18, responseHotel.length()-2);
+            }
+
+            if (responseAirline.contains("Airline-ID:")) {
+                this.airlinesPart = "Airline-ID: " + responseAirline.substring(responseAirline.indexOf("Airline-ID: ")+12, responseAirline.indexOf("Airline-Suggestion:")-2) + "\r\n";
+                this.airlinesPart += "Airline-Suggestion: " + responseAirline.substring(responseAirline.indexOf("Airline-Suggestion: ")+20, responseAirline.length()-2);
+            }
+
+            if (responseHotel.contains("Hotel-IDs:")) {
+                this.hotelsPart = "Hotel-IDs: " + responseHotel.substring(responseHotel.indexOf("Hotel-IDs: ")+11, responseHotel.indexOf("Hotel-Suggestion:")-2) + "\r\n";
+                this.hotelsPart += "Hotel-Suggestion: " + responseHotel.substring(responseHotel.indexOf("Hotel-Suggestion: ")+18, responseHotel.length()-2);
+            }
+
+            if (responseAirline.contains("Airline-IDs:")) {
+                this.airlinesPart = "Airline-IDs: " + responseAirline.substring(responseAirline.indexOf("Airline-IDs: ")+13, responseAirline.indexOf("Airline-Suggestion:")-2) + "\r\n";
+                this.airlinesPart += "Airline-Suggestion: " + responseAirline.substring(responseAirline.indexOf("Airline-Suggestion: ")+20, responseAirline.length()-2);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,21 +177,17 @@ public class TravelAgency implements Runnable {
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                //this.firstLoginFlag=false;
                 String inputLine;
                 String response="";
 
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
-                    //response+=inputLine+"\r\n";
-                    //System.out.println("******* " + inputLine);
                     if (inputLine.equals("First-Login: true")) {
 
                         startClientConnection();    // start connection
                         sendInitialMessage();     // send message
                         stopClientConnection();
 
-                        response += "Hotels: " + this.hotelsPart + "\r\n" +
-                                "Airlines: " + this.airlinesPart + "\r\n";
+                        response += "Hotels: " + this.hotelsPart + "\r\n" + "Airlines: " + this.airlinesPart + "\r\n";
                         this.firstLoginFlag=true;
                         break;
                     }
@@ -180,6 +197,7 @@ public class TravelAgency implements Runnable {
                         sendMessage(in.readLine());
                         stopClientConnection();
 
+                        response += this.hotelsPart + "\r\n" + this.airlinesPart + "\r\n";
                         this.firstLoginFlag=false;
                     }
                 }
@@ -187,13 +205,7 @@ public class TravelAgency implements Runnable {
                 out.println("Date: " + new Date());
                 out.println("Server: Travel Agency");
                 out.println("Connection: close");
-
-                if (!firstLoginFlag) {
-                    out.println(response);
-                }
-                else {
-                    out.println(response);
-                }
+                out.println(response);
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -51,9 +51,7 @@ public class HotelController implements Runnable{
                 else if(requestType.equals("checkHotelSituation")) {
                     checkHotelFlag=true;
                 }
-                else {
-                    System.out.println("YASAK BÖLGE");
-                }
+                else { }
 
                 if (checkHotelFlag) {
                     ArrayList<Integer> hotelIDs = new ArrayList<Integer>();
@@ -63,25 +61,25 @@ public class HotelController implements Runnable{
 
                     if (hotelIDs.size()==0) {
                         // No available hotel
-                        response += "Hotel ID: " + 0 + "\r\n";
-                        response += "Hotel Suggestion: false\r\n";
+                        response += "Hotel-ID: " + 0 + "\r\n";
+                        response += "Hotel-Suggestion: false\r\n";
                     }
                     else if (hotelIDs.size()==1){
                         if (hotelID==hotelIDs.get(0)) {
                             // Requested hotel is okay
-                            response += "Hotel ID: " + hotelID + "\r\n";
-                            response += "Hotel Suggestion: false\r\n";
+                            response += "Hotel-ID: " + hotelID + "\r\n";
+                            response += "Hotel-Suggestion: false\r\n";
                         }
                         else {
                             // Suggested hotel. Just one
-                            response += "Hotel ID: " + hotelID + "\r\n";
-                            response += "Hotel Suggestion: true\r\n";
+                            response += "Hotel-ID: " + hotelIDs.get(0) + "\r\n";
+                            response += "Hotel-Suggestion: true\r\n";
                         }
                     }
                     else {
                         // Suggested hotels. More than one
-                        response += "Hotel IDs: " + hotelIDs + "\r\n";
-                        response += "Hotel Suggestion: true\r\n";
+                        response += "Hotel-IDs: " + hotelIDs + "\r\n";
+                        response += "Hotel-Suggestion: true\r\n";
                     }
                 }
 
@@ -101,7 +99,6 @@ public class HotelController implements Runnable{
         }
     }
 
-    // todo: return alicaz
     private ArrayList<Integer> checkHotel(String request) {
         HashMap<Integer, HashMap> data;
         HashMap<Integer, String> hotels;
@@ -114,20 +111,15 @@ public class HotelController implements Runnable{
         boolean hotelStatusFlag=true;
         ArrayList<Integer> hotelIDs = new ArrayList<Integer>();
 
-        // todo: ayni aydaki gunlerin farkini aliyor sadece(BUG)
         while (startDate_day<=Integer.parseInt(dateEnd.substring(0,2))) {
             dates.add(String.valueOf(startDate_day)+dateStart.substring(2, dateStart.length()));
             startDate_day++;
         }
 
         data = DatabaseController.readDetailFile(new File("HotelDetail_"+hotelID+".txt"));
-        //System.out.println("*************************");
-        //System.out.println(data);
-
         hotelStatusFlag=checkDates(dates, data, numberOfTraveller);
 
         if (hotelStatusFlag) {
-            // TODO: hotel uygundur response
             hotelIDs.add(hotelID);
             return hotelIDs;
         }
@@ -139,12 +131,10 @@ public class HotelController implements Runnable{
                     data = DatabaseController.readDetailFile(new File("HotelDetail_"+alternativeHotelID+".txt"));
                     if (hotelStatusFlag=checkDates(dates, data, numberOfTraveller)) {
                         hotelIDs.add(alternativeHotelID);
-                        //break;
                     }
                 }
                 alternativeHotelID++;
             }
-            //System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq " + alternativeHotelID);
             return hotelIDs;
         }
     }
@@ -155,10 +145,9 @@ public class HotelController implements Runnable{
         for (String date: dates) {
             for (int i:data.keySet()) {
                 if (date.equals(data.get(i).get("Date"))) {
-                    freeRoom=Integer.parseInt((String) data.get(i).get("Capacity")) - Integer.parseInt((String) data.get(i).get("Full Room"));
+                    freeRoom=Integer.parseInt((String) data.get(i).get("Capacity")) - Integer.parseInt((String) data.get(i).get("Engaged"));
                     if (numberOfTraveller > freeRoom) {
-                        hotelStatusFlag=false;
-                        //System.out.println("YER YOK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        hotelStatusFlag=false; // not enough free room in hotel
                     }
                 }
             }

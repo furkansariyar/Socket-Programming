@@ -69,9 +69,9 @@ public class DatabaseController {
                 //detailData.clear();
                 HashMap<String, String> detailData = new HashMap<String, String>();
                 String[] separatedLine = line.split(",");
-                detailData.put("Hotel Name", separatedLine[1]);
+                detailData.put("Target", separatedLine[1]); // just for airlines
                 detailData.put("Date", separatedLine[2]);
-                detailData.put("Full Room", separatedLine[3]);
+                detailData.put("Engaged", separatedLine[3]);
                 detailData.put("Capacity", separatedLine[4]);
                 data.put(Integer.parseInt(separatedLine[0]), detailData);
             }
