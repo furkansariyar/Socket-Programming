@@ -42,6 +42,11 @@ public class GUI extends JFrame {
         jPanel.add(exitDateLabel);
         jPanel.add(exitDate);
 
+        JButton tripSearchButton = new JButton();
+        tripSearchButton.setText("TRIP SEARCH");
+
+        jPanel.add(tripSearchButton);
+
         add(jPanel);
 
         setSize(400,400);
@@ -57,6 +62,13 @@ public class GUI extends JFrame {
         airlineComboBox.addActionListener (new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 getAirlineIDFromString(airlineComboBox.getSelectedItem().toString());
+            }
+        });
+
+        tripSearchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Main.createClient();
             }
         });
     }

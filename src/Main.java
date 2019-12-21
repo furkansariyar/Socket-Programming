@@ -13,7 +13,6 @@ public class Main {
         startServer();
         createClient();
         createClient();
-
     }
 
     public static void createClient() {
