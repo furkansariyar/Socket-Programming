@@ -24,7 +24,7 @@ public class Main {
 
         // Get all hotels and airlines
         //System.out.println("Get All Hotels and Airlines");
-        String response=client.sendMessage(new TripDetail(0, 0, 0));
+        String response=client.sendMessage(new TripDetail(0, 0, 0, "", ""));
         System.out.println("Server:\n" + response);
 
         client.stopConnection();
@@ -44,7 +44,11 @@ public class Main {
         hotelID=gui.getHotelID();
         airlineID=gui.getAirlineID();
 
-        TripDetail tripDetail = new TripDetail(1, airlineID, hotelID);
+        //todo: BU KALICI DEĞİL
+        hotelID=1;
+        airlineID=1;
+
+        TripDetail tripDetail = new TripDetail(1, airlineID, hotelID, "18.12.2019", "19.12.2019");
         clientRequest(client, tripDetail);
 
         //server.stop();
@@ -53,9 +57,11 @@ public class Main {
     public static void clientRequest(Client client, TripDetail tripDetail) {
         client.setFirstLoginFlag(false);
         client.startConnection(host, 8070);
-        System.out.println("Client: " + tripDetail.numberOfTravellers + " " + tripDetail.preferredAirline + " " + tripDetail.preferredHotel);
+        System.out.println("Client: " + tripDetail.numberOfTravellers + " " + tripDetail.preferredAirline + " "
+                + tripDetail.preferredHotel + " " + tripDetail.dateStart + " " + tripDetail.dateEnd);
         String response2=client.sendMessage(tripDetail);
         System.out.println("Server: \n" + response2);
+        client.stopConnection();
     }
 
     public static void startServer() {

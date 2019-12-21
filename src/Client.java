@@ -25,11 +25,11 @@ public class Client {
     public String sendMessage(TripDetail tripDetail) {
 
 
-        String message = String.valueOf(tripDetail.numberOfTravellers)+"\r\n" +
-                tripDetail.preferredAirline+"\r\n" +
-                tripDetail.preferredHotel+"\r\n";
-
-        //System.out.println("###########");
+        String message = String.valueOf(tripDetail.numberOfTravellers)+"," +
+                tripDetail.preferredAirline+"," +
+                tripDetail.preferredHotel+"," +
+                tripDetail.dateStart+"," +
+                tripDetail.dateEnd+"\r\n";
 
         out.println("NEW-PROTOCOL/1.1");
         out.println("Host: " + this.host);
@@ -37,7 +37,7 @@ public class Client {
         out.println("Accept: text/html");
         out.println("Accept-Language: en-US");
         out.println("First-Login: " + String.valueOf(this.firstLoginFlag));
-        out.println(message); // Sending message to Travel Agency server
+        out.println("Data: " + message); // Sending message to Travel Agency server
         out.println();
 
 

@@ -4,18 +4,10 @@ import java.net.Socket;
 import java.util.Date;
 
 public class TravelAgency implements Runnable {
-
-    /* TODO: Oteller ve havayolu şirketleriyle iletişim kurulacak.
-     * TODO: istenilen tarih aralığında, kişi sayısı da göz önünde bulundurularak yer var mı sorgulanacak.
-     * */
-
     private ServerSocket serverSocket;
     private Socket clientSocket, agencySocket_Hotel, agencySocket_Airline;
     private PrintWriter out, out2, out3;
     private BufferedReader in, in2, in3;
-
-/*    private HashMap<Integer, String> hotels;
-    private HashMap<Integer, String> airlines;*/
     private boolean firstLoginFlag;
     private String host="127.0.0.1";
     // TODO: ports can be defined here
@@ -27,7 +19,6 @@ public class TravelAgency implements Runnable {
     String hotelsPart="", airlinesPart="";
 
     public TravelAgency() {
-
     }
 
     public void start(int port) {
@@ -99,6 +90,64 @@ public class TravelAgency implements Runnable {
         }
     }
 
+    public void sendMessage(String data) {
+        String[] dataArr=data.substring(6, data.length()).split(","); // First trim the 'Data: ' part, then split
+        int numberOfTravellers = Integer.parseInt(dataArr[0]);
+        int airlineID = Integer.parseInt(dataArr[1]);
+        int hotelID = Integer.parseInt(dataArr[2]);
+        String dateStart = dataArr[3];
+        String dateEnd = dataArr[4];
+
+        try {
+            out2.println("GET " + "/checkHotelSituation" + " HTTP/1.1");
+            out2.println("Host: " + this.host);
+            out2.println("User-Agent: Travel Agency");
+            out2.println("Accept: text/html");
+            out2.println("Accept-Language: en-US");
+            out2.println("Connection: close");
+            out2.println("HotelID: " + hotelID);
+            out2.println("Traveller-Count: " + numberOfTravellers);
+            out2.println("Date-Start: " + dateStart);
+            out2.println("Date-End: " + dateEnd);
+            out2.println();
+
+            out3.println("GET " + "/checkAirlineSituation" + " HTTP/1.1");
+            out3.println("Host: " + this.host);
+            out3.println("User-Agent: Travel Agency");
+            out3.println("Accept: text/html");
+            out3.println("Accept-Language: en-US");
+            out3.println("Connection: close");
+            out3.println("AirlineID: " + airlineID);
+            out3.println("Traveller-Count: " + numberOfTravellers);
+            out3.println("Date-Start: " + dateStart);
+            out3.println("Date-End: " + dateEnd);
+            out3.println();
+
+            String inputLineHotel, inputLineAirline;
+            String responseHotel="", responseAirline="";
+            while ((inputLineHotel=in2.readLine()) != null && !inputLineHotel.isEmpty()) {
+                responseHotel+=inputLineHotel+"\r\n";
+            }
+            System.out.println(responseHotel);    // Displaying HTTP response content
+
+            while ((inputLineAirline=in3.readLine()) != null && !inputLineAirline.isEmpty()) {
+                responseAirline+=inputLineAirline+"\r\n";
+            }
+            System.out.println(responseAirline);    // Displaying HTTP response content
+
+            if (responseHotel.contains("Hotels:")) {
+                this.hotelsPart = responseHotel.substring(responseHotel.indexOf("Hotels: ")+8, responseHotel.indexOf("}")+1);
+            }
+
+            if (responseAirline.contains("Airlines:")) {
+                this.airlinesPart = responseAirline.substring(responseAirline.indexOf("Airlines: ")+10, responseAirline.indexOf("}")+1);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void getRequest() {
         while(true) {
@@ -126,8 +175,12 @@ public class TravelAgency implements Runnable {
                         break;
                     }
                     else if (inputLine.equals("First-Login: false")) {
+
+                        startClientConnection();
+                        sendMessage(in.readLine());
+                        stopClientConnection();
+
                         this.firstLoginFlag=false;
-                        break;
                     }
                 }
                 out.println("HTTP/1.1 200 OK");

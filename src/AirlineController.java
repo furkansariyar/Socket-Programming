@@ -47,6 +47,7 @@ public class AirlineController implements Runnable{
                 }
                 else {
                     //todo: trip detail request i buraya gelecek
+                    //response+="FURKAN\r\n";
                 }
 
                 out.println("HTTP/1.1 200 OK");

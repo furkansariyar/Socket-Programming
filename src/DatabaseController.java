@@ -45,10 +45,37 @@ public class DatabaseController {
                 String line = myReader.nextLine();
                 //System.out.println(line);
 
-                String[] separatedLine = line.split("---", 2);
+                String[] separatedLine = line.split(",", 2);
                 data.put(Integer.valueOf(separatedLine[0]), separatedLine[1]);
             }
             myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public static HashMap<Integer, HashMap> readDetailFile(File file) {
+
+        HashMap<Integer, HashMap> data = new HashMap<Integer, HashMap>();
+        //int id;
+
+        try {
+            Scanner reader = new Scanner(file);
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                //System.out.println(line);
+                //detailData.clear();
+                HashMap<String, String> detailData = new HashMap<String, String>();
+                String[] separatedLine = line.split(",");
+                detailData.put("Hotel Name", separatedLine[1]);
+                detailData.put("Date", separatedLine[2]);
+                detailData.put("Full Room", separatedLine[3]);
+                detailData.put("Capacity", separatedLine[4]);
+                data.put(Integer.parseInt(separatedLine[0]), detailData);
+            }
+            reader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
