@@ -47,7 +47,6 @@ public class GUI extends JFrame {
         setSize(400,400);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        BoxLayoutFrame boxLayoutFrame = new BoxLayoutFrame(hotelsMap, airlinesMap);
 
         hotelComboBox.addActionListener (new ActionListener() {
             public void actionPerformed(ActionEvent e) {
