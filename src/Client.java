@@ -29,6 +29,7 @@ public class Client {
     public String sendMessage(TripDetail tripDetail, boolean confirmationFlag) {
 
         if (confirmationFlag) {
+
             out.println("NEW-PROTOCOL/1.1");
             out.println("Host: " + this.host);
             out.println("User-Agent: Client");
@@ -37,6 +38,9 @@ public class Client {
             out.println("Confirmation-Flag: true");
             out.println("Hotel-ID: "+ this.hotelID);
             out.println("Airline-ID: "+ this.airlineID);
+            out.println("Date-Start: " + tripDetail.getDataStart());
+            out.println("Date-End: " + tripDetail.getDateEnd());
+            out.println("Traveller-Count: " + tripDetail.getNumberOfTravellers());
             out.println();
         }
         else {

@@ -79,22 +79,22 @@ public class Main {
         String response=client.sendMessage(tripDetail, false);
         System.out.println("Server: \n" + response);
         client.stopConnection();
-        confirmation(client, response, gui); // confirmation method called. Its parameter is server response
+        confirmation(client, response, gui, tripDetail); // confirmation method called. Its parameter is server response
     }
 
-    private static void confirmation(Client client, String data, GUI gui) {
+    private static void confirmation(Client client, String data, GUI gui, TripDetail tripDetail) {
         String hotelID = data.substring(data.indexOf("Hotel-ID: ")+10, data.indexOf("Hotel-Suggestion:")-2);
         String airlineID = data.substring(data.indexOf("Airline-ID: ")+12, data.indexOf("Airline-Suggestion:")-2);
         // TODO: guiye tekrar gidecek okay veya cancel donecek. okay gelirse devam et, cancel gelirse bir sey yapmaya gerek yok
         client.setHotelID(Integer.parseInt(hotelID));
         client.setAirlineID(Integer.parseInt(airlineID));
-        confirmationRequest(client);
+        confirmationRequest(client, tripDetail);
         gui.responseConfirmation(client);
     }
 
-    private static void confirmationRequest(Client client) {
+    private static void confirmationRequest(Client client, TripDetail tripDetail) {
         client.startConnection(host, 8070);
-        String response=client.sendMessage(new TripDetail(0, 0, 0, "", ""), true);
+        String response=client.sendMessage(tripDetail, true);
         System.out.println("Server: \n" + response);
         client.stopConnection();
     }
