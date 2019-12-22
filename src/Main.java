@@ -88,8 +88,9 @@ public class Main {
         // TODO: guiye tekrar gidecek okay veya cancel donecek. okay gelirse devam et, cancel gelirse bir sey yapmaya gerek yok
         client.setHotelID(Integer.parseInt(hotelID));
         client.setAirlineID(Integer.parseInt(airlineID));
-        confirmationRequest(client, tripDetail);
-        gui.responseConfirmation(client);
+        if (gui.responseConfirmation(client) == 0){
+            confirmationRequest(client, tripDetail);
+        }
     }
 
     private static void confirmationRequest(Client client, TripDetail tripDetail) {
