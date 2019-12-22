@@ -25,7 +25,7 @@ public class Main {
 
         // Get all hotels and airlines
         //System.out.println("Get All Hotels and Airlines");
-        String response=client.sendMessage(new TripDetail(0, 0, 0, "", ""));
+        String response=client.sendMessage(new TripDetail(0, 0, 0, "", ""), false);
         System.out.println("Server:\n" + response);
 
         client.stopConnection();
@@ -59,13 +59,30 @@ public class Main {
         //server.stop();
     }
 
-    public static void clientRequest(Client client, TripDetail tripDetail) {
+    private static void clientRequest(Client client, TripDetail tripDetail) {
         client.setFirstLoginFlag(false);
         client.startConnection(host, 8070);
-        System.out.println("Client: " + tripDetail.numberOfTravellers + " " + tripDetail.preferredAirline + " "
-                + tripDetail.preferredHotel + " " + tripDetail.dateStart + " " + tripDetail.dateEnd);
-        String response2=client.sendMessage(tripDetail);
-        System.out.println("Server: \n" + response2);
+        /*System.out.println("Client: " + tripDetail.numberOfTravellers + " " + tripDetail.preferredAirline + " "
+                + tripDetail.preferredHotel + " " + tripDetail.dateStart + " " + tripDetail.dateEnd);*/
+        String response=client.sendMessage(tripDetail, false);
+        System.out.println("Server: \n" + response);
+        client.stopConnection();
+        confirmation(client, response); // confirmation method called. Its parameter is server response
+    }
+
+    private static void confirmation(Client client, String data) {
+        String hotelID = data.substring(data.indexOf("Hotel-ID: ")+10, data.indexOf("Hotel-Suggestion:")-2);
+        String airlineID = data.substring(data.indexOf("Airline-ID: ")+12, data.indexOf("Airline-Suggestion:")-2);
+        // TODO: guiye tekrar gidecek okay veya cancel donecek. okay gelirse devam et, cancel gelirse bir sey yapmaya gerek yok
+        client.setHotelID(Integer.parseInt(hotelID));
+        client.setAirlineID(Integer.parseInt(airlineID));
+        confirmationRequest(client);
+    }
+
+    private static void confirmationRequest(Client client) {
+        client.startConnection(host, 8070);
+        String response=client.sendMessage(new TripDetail(0, 0, 0, "", ""), true);
+        System.out.println("Server: \n" + response);
         client.stopConnection();
     }
 

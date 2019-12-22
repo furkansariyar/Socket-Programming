@@ -11,6 +11,7 @@ public class Client {
     private boolean firstLoginFlag;
     private String host="127.0.0.1";
     // TODO: ports can be defined here
+    private int hotelID, airlineID;
 
     public void startConnection(String ip, int port) {
         try {
@@ -22,24 +23,35 @@ public class Client {
         }
     }
 
-    public String sendMessage(TripDetail tripDetail) {
+    public String sendMessage(TripDetail tripDetail, boolean confirmationFlag) {
 
+        if (confirmationFlag) {
+            out.println("NEW-PROTOCOL/1.1");
+            out.println("Host: " + this.host);
+            out.println("User-Agent: Client");
+            out.println("Accept: text/html");
+            out.println("Accept-Language: en-US");
+            out.println("Confirmation-Flag: true");
+            out.println("Hotel-ID: "+ this.hotelID);
+            out.println("Airline-ID: "+ this.airlineID);
+            out.println();
+        }
+        else {
+            String message = String.valueOf(tripDetail.numberOfTravellers)+"," +
+                    tripDetail.preferredAirline+"," +
+                    tripDetail.preferredHotel+"," +
+                    tripDetail.dateStart+"," +
+                    tripDetail.dateEnd+"\r\n";
 
-        String message = String.valueOf(tripDetail.numberOfTravellers)+"," +
-                tripDetail.preferredAirline+"," +
-                tripDetail.preferredHotel+"," +
-                tripDetail.dateStart+"," +
-                tripDetail.dateEnd+"\r\n";
-
-        out.println("NEW-PROTOCOL/1.1");
-        out.println("Host: " + this.host);
-        out.println("User-Agent: Client");
-        out.println("Accept: text/html");
-        out.println("Accept-Language: en-US");
-        out.println("First-Login: " + String.valueOf(this.firstLoginFlag));
-        out.println("Data: " + message); // Sending message to Travel Agency server
-        out.println();
-
+            out.println("NEW-PROTOCOL/1.1");
+            out.println("Host: " + this.host);
+            out.println("User-Agent: Client");
+            out.println("Accept: text/html");
+            out.println("Accept-Language: en-US");
+            out.println("First-Login: " + String.valueOf(this.firstLoginFlag));
+            out.println("Data: " + message); // Sending message to Travel Agency server
+            out.println();
+        }
 
         String resp = null;
         String response = "";
@@ -73,5 +85,13 @@ public class Client {
 
     public void setFirstLoginFlag(boolean firstLoginFlag) {
         this.firstLoginFlag = firstLoginFlag;
+    }
+
+    public void setHotelID(int hotelID) {
+        this.hotelID = hotelID;
+    }
+
+    public void setAirlineID(int airlineID) {
+        this.airlineID = airlineID;
     }
 }

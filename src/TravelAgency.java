@@ -200,6 +200,13 @@ public class TravelAgency implements Runnable {
                         response += this.hotelsPart + "\r\n" + this.airlinesPart + "\r\n";
                         this.firstLoginFlag=false;
                     }
+                    else if (inputLine.equals("Confirmation-Flag: true")) {
+                        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                        System.out.println(in.readLine());
+                        System.out.println(in.readLine());
+                        System.out.println();
+                        // TODO: 22.12.2019 send message to confirm the changes
+                    }
                 }
                 out.println("HTTP/1.1 200 OK");
                 out.println("Date: " + new Date());

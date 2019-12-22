@@ -139,24 +139,28 @@ public class AirlineController implements Runnable{
 
     private boolean checkTargetAndDates(ArrayList <String> dates, HashMap<Integer, HashMap> data, int numberOfTraveller, int hotelID) {
         int freeSeat;
-        boolean airlineStatusFlag=true;
-        for (String date: dates) {
-            for (int i:data.keySet()) {
-                if (date.equals(data.get(i).get("Date")) && Integer.parseInt((String) data.get(i).get("Target"))==hotelID) {
-                    freeSeat=Integer.parseInt((String) data.get(i).get("Capacity")) - Integer.parseInt((String) data.get(i).get("Engaged"));
-                    if (numberOfTraveller > freeSeat) {
-                        airlineStatusFlag=false; // not enough free seat in airline
+        // we have 2 dates so there are 2 flags for each dates. In each match, just one flag set to 'true'
+        boolean flag1=false;
+        boolean flag2=false;
+        for (int i=0; i<dates.size(); i++) {
+            for (int j=1; j<=data.size(); j++) {    // id starts from 1 in databases
+                if (dates.get(i).equals(data.get(j).get("Date"))) {
+                    if (Integer.parseInt((String) data.get(j).get("Target"))==hotelID) {
+                        freeSeat=Integer.parseInt((String) data.get(j).get("Capacity")) - Integer.parseInt((String) data.get(j).get("Engaged"));
+                        if (numberOfTraveller <= freeSeat) {
+                            if (flag1) {
+                                flag2=true;
+                            }
+                            else {
+                                flag1=true;
+                            }
+                        }
+                        j=data.size()+1;
                     }
-                    else {
-                        airlineStatusFlag=true;
-                    }
-                }
-                else {
-                    airlineStatusFlag=false;
                 }
             }
         }
-        return airlineStatusFlag;
+        return flag1 && flag2;
     }
 
     @Override
