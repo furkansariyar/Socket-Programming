@@ -166,6 +166,57 @@ public class TravelAgency implements Runnable {
         }
     }
 
+/*    public void sendConfirmationMessage(String hotelPart, String airlinePart) {
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+        int hotelID = Integer.parseInt(hotelPart.substring(hotelPart.indexOf("Hotel-ID: ")+10, hotelPart.length()));
+        int airlineID = Integer.parseInt(airlinePart.substring(airlinePart.indexOf("Airline-ID: ")+12, airlinePart.length()));
+        System.out.println(hotelID);
+        System.out.println(airlineID);
+
+        try {
+            out2.println("GET " + "/confirmHotel" + " HTTP/1.1");
+            out2.println("Host: " + this.host);
+            out2.println("User-Agent: Travel Agency");
+            out2.println("Accept: text/html");
+            out2.println("Accept-Language: en-US");
+            out2.println("Connection: close");
+            out2.println();
+
+            out3.println("GET " + "/confirmAirline" + " HTTP/1.1");
+            out3.println("Host: " + this.host);
+            out3.println("User-Agent: Travel Agency");
+            out3.println("Accept: text/html");
+            out3.println("Accept-Language: en-US");
+            out3.println("Connection: close");
+            out3.println();
+
+*//*            String inputLineHotel, inputLineAirline;
+            String responseHotel="", responseAirline="";
+            while ((inputLineHotel=in2.readLine()) != null && !inputLineHotel.isEmpty()) {
+                responseHotel+=inputLineHotel+"\r\n";
+            }
+            System.out.println(responseHotel);    // Displaying HTTP response content
+
+            while ((inputLineAirline=in3.readLine()) != null && !inputLineAirline.isEmpty()) {
+                responseAirline+=inputLineAirline+"\r\n";
+            }
+            System.out.println(responseAirline);    // Displaying HTTP response content
+
+            if (responseHotel.contains("Hotels:")) {
+                this.hotelsPart = responseHotel.substring(responseHotel.indexOf("Hotels: ")+8, responseHotel.indexOf("}")+1);
+            }
+
+            if (responseAirline.contains("Airlines:")) {
+                this.airlinesPart = responseAirline.substring(responseAirline.indexOf("Airlines: ")+10, responseAirline.indexOf("}")+1);
+            }*//*
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }*/
+
 
     public void getRequest() {
         while(true) {
@@ -198,11 +249,8 @@ public class TravelAgency implements Runnable {
                         this.firstLoginFlag=false;
                     }
                     else if (inputLine.equals("Confirmation-Flag: true")) {
-                        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                        System.out.println(in.readLine());
-                        System.out.println(in.readLine());
-                        System.out.println();
-                        // TODO: 22.12.2019 send message to confirm the changes
+                        // after confirmation flag, hotelID and airlineID headers comes respectively
+                        //sendConfirmationMessage(in.readLine(), in.readLine());
                     }
                 }
                 out.println("HTTP/1.1 200 OK");
