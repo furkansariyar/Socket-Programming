@@ -1,2 +1,2 @@
-1,suvas hotel
-2,hotel erzincan
+1,Sivas Hotel
+2,Hotel Erzincan

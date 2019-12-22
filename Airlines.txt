@@ -1,2 +1,2 @@
-1,sivas turizm
-2,erzincan turizm
+1,Sivas Turizm
+2,Erzincan Turizm

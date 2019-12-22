@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,24 +90,30 @@ public class GUI extends JFrame {
                 if (dateCheck(entranceDate.getText()))
                     checkCounter++;
                 else
-                    JOptionPane.showMessageDialog(null, "Entered a invalid date for entrance date!", "InfoBox: " + "INVALID DATE", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Entered an invalid date for entrance date!", "INVALID DATE", JOptionPane.ERROR_MESSAGE);
 
                 if (dateCheck(exitDate.getText()))
                     checkCounter++;
                 else
-                    JOptionPane.showMessageDialog(null, "Entered a invalid date for exit date!", "InfoBox: " + "INVALID DATE", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Entered an invalid date for exit date!", "INVALID DATE", JOptionPane.ERROR_MESSAGE);
+
+                if (dateCompare((entranceDate.getText()), (exitDate.getText()))){
+                    checkCounter++;
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Entered an exit date that is before entrance date!", "INVALID DATE", JOptionPane.ERROR_MESSAGE);
 
                 if (integerCheck(numberOfTravellersField.getText())){
                     checkCounter++;
                     if (numberOfTravellersCheck(Integer.parseInt(numberOfTravellersField.getText())))
                         checkCounter++;
                     else
-                        JOptionPane.showMessageDialog(null, "Entered a invalid number for travellers!", "InfoBox: " + "INVALID NUMBER OF TRAVELLERS", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Entered an invalid number for travellers!", "INVALID NUMBER OF TRAVELLERS", JOptionPane.ERROR_MESSAGE);
                 }
                 else
-                    JOptionPane.showMessageDialog(null, "Entered a invalid number for travellers!", "InfoBox: " + "INVALID NUMBER OF TRAVELLERS", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Entered an invalid number for travellers!", "INVALID NUMBER OF TRAVELLERS", JOptionPane.ERROR_MESSAGE);
 
-                if (checkCounter==4){
+                if (checkCounter==5){
                     getHotelIDFromString(hotelComboBox.getSelectedItem().toString());
                     getAirlineIDFromString(airlineComboBox.getSelectedItem().toString());
                     dateStart = entranceDate.getText();
@@ -118,21 +125,56 @@ public class GUI extends JFrame {
         });
     }
 
-    public void responseConfirmation(Client client){
+    public boolean dateCompare(String entranceStr, String exitStr){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        if (entranceStr.equals("") || exitStr.equals("")){
+            return false;
+        }
+
+        try {
+            Date entranceDate = dateFormat.parse(entranceStr);
+            Date exitDate = dateFormat.parse(exitStr);
+            if (exitDate.compareTo(entranceDate) > 1){
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public int responseConfirmation(Client client){
         int confirmationHotelID = client.getHotelID();
         int confirmationAirlineID = client.getAirlineID();
         String confirmationHotelName = hotelsMap.get(confirmationHotelID);
         String confirmationAirlineName = airlinesMap.get(confirmationAirlineID);
+        String title = "";
+        int result = -1;
 
-        int result = JOptionPane.showConfirmDialog(null,"Do you want to confirm this trip?\n" + "Hotel: " +
-                        confirmationHotelName + "\n Airline: " + confirmationAirlineName, "TRIP CONFIRM",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-        if(result == JOptionPane.YES_OPTION){
-            JOptionPane.showMessageDialog(null, "You selected YES!", "InfoBox: " + "CONFIRM", JOptionPane.INFORMATION_MESSAGE);
-        }else if (result == JOptionPane.NO_OPTION) {
-            JOptionPane.showMessageDialog(null, "You selected NO!", "InfoBox: " + "CONFIRM", JOptionPane.INFORMATION_MESSAGE);
+        if (confirmationHotelID == 0 || confirmationAirlineID == 0){
+            JOptionPane.showMessageDialog(null, "No trips were found to suit your wishes!", "TRIP NOT FOUND", JOptionPane.ERROR_MESSAGE);
         }
+        else{
+            if (confirmationHotelID == hotelID && confirmationHotelID == airlineID){
+                title = "DESIRED TRIP CONFORMATION";
+            }
+            else{
+                title = "SUGGESTION TRIP CONFIRMATION";
+            }
+
+            result = JOptionPane.showConfirmDialog(null,"Do you want to confirm this trip?\n" + "Hotel: " +
+                            confirmationHotelName + "\n Airline: " + confirmationAirlineName, title,
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if(result == JOptionPane.YES_OPTION){
+                JOptionPane.showMessageDialog(null, "You selected YES!", "CONFIRM", JOptionPane.INFORMATION_MESSAGE);
+            }else if (result == JOptionPane.NO_OPTION) {
+                JOptionPane.showMessageDialog(null, "You selected NO!", "CONFIRM", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+
+        return result;
     }
 
     private boolean integerCheck(String number){
