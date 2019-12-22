@@ -15,6 +15,7 @@ public class AirlineController implements Runnable{
     public AirlineController() {
     }
 
+    // open socket
     public void start(int port) {
         System.out.println("Airline server opened!\n");
         try {
@@ -25,6 +26,7 @@ public class AirlineController implements Runnable{
         getRequest();
     }
 
+    // wait request
     public void getRequest() {
         while (true) {
             try {
@@ -36,12 +38,15 @@ public class AirlineController implements Runnable{
                 String request="";
                 String response="";
                 String data="";
+                // read request line by line
                 boolean checkAirlineFlag=false, confirmAirlineFlag=false;
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     request+=inputLine+"\r\n";
                 }
                 System.out.println(request);    // Displaying HTTP request content
 
+                // there are 3 different scenario
+                // determined these scenario at beginning of the headers
                 String requestType = request.substring(request.indexOf(" /")+2, request.indexOf(" HTTP"));
                 if (requestType.equals("getAllAirlines")) {
                     response += "Airlines: " +String.valueOf(DatabaseController.readFile(new File("Airlines.txt"))) + "\r\n";
@@ -54,10 +59,14 @@ public class AirlineController implements Runnable{
                 }
                 else { }
 
+                // trip request comes here
+                // It checks airlines
                 if (checkAirlineFlag) {
+                    // parse data
                     ArrayList<Integer> airlineIDs = new ArrayList<Integer>();
                     data=request.substring(request.indexOf("AirlineID"), request.length()-2);
                     int airlineID=Integer.parseInt(data.substring(data.indexOf("AirlineID:")+11, data.indexOf("Target-HotelID:")-2));
+                    // get proper airlines ids
                     airlineIDs=checkAirline(data);
 
                     if (airlineIDs.size()==0) {
@@ -83,16 +92,19 @@ public class AirlineController implements Runnable{
                         response += "Airline-Suggestion: true\r\n";
                     }
                 }
+                // Confirmation request comes here
                 else if (confirmAirlineFlag) {
                     response+="Airline-Updated: "+confirmAirline(request.substring(request.indexOf("AirlineID:"), request.length()-2))+"\r\n";
                 }
 
+                // HTTP response headers
                 out.println("HTTP/1.1 200 OK");
                 out.println("Date: " + new Date());
                 out.println("Server: Airline Controller");
                 out.println("Connection: close");
                 out.println(response);
 
+                // closing socket
                 in.close();
                 out.close();
                 agencySocket.close();
@@ -103,15 +115,19 @@ public class AirlineController implements Runnable{
         }
     }
 
+    // airline is updated with confirmation request
     private String confirmAirline(String request) {
         ArrayList<String> dates = new ArrayList<String>();
+        // parse data
         int airlineID=Integer.parseInt(request.substring(request.indexOf("AirlineID:")+11, request.indexOf("Traveller-Count:")-2));
         int numberOfTraveller=Integer.parseInt(request.substring(request.indexOf("Traveller-Count:")+17, request.indexOf("Date-Start")-2));
         String dateStart=request.substring(request.indexOf("Date-Start:")+12, request.indexOf("Date-End:")-2);
         String dateEnd=request.substring(request.indexOf("Date-End:")+10, request.length());
+        // just departure and arrival dates put in arraylist
         dates.add(dateStart);   // date of departure
         dates.add(dateEnd);     // date of arrival
 
+        // update hotel file for each date
         for (int i=0; i<dates.size(); i++) {
             DatabaseController.updateFile(new File("AirlineDetail_"+airlineID+".txt"), dates.get(i), numberOfTraveller);
         }
@@ -119,10 +135,12 @@ public class AirlineController implements Runnable{
         return "OK";
     }
 
+    // check airline has enough free seat. Then return airlineID that has enough free seat.
     private ArrayList<Integer> checkAirline(String request) {
         HashMap<Integer, HashMap> data;
         HashMap<Integer, String> airlines;
         ArrayList<String> dates = new ArrayList<String>();
+        // parse data
         int airlineID=Integer.parseInt(request.substring(request.indexOf("AirlineID:")+11, request.indexOf("Target-HotelID:")-2));
         int hotelID=Integer.parseInt(request.substring(request.indexOf("Target-HotelID:")+16, request.indexOf("Traveller-Count:")-2));
         int numberOfTraveller=Integer.parseInt(request.substring(request.indexOf("Traveller-Count:")+17, request.indexOf("Date-Start")-2));
@@ -134,13 +152,16 @@ public class AirlineController implements Runnable{
         dates.add(dateStart);   // date of departure
         dates.add(dateEnd);     // date of arrival
 
+        // check requested airline has enough free seat
         data = DatabaseController.readDetailFile(new File("AirlineDetail_"+airlineID+".txt"));
         airlineStatusFlag=checkTargetAndDates(dates, data, numberOfTraveller, hotelID);
 
+        // if requested airline has enough free seat, then return id of the airline
         if (airlineStatusFlag) {
             airlineIDs.add(airlineID);
             return airlineIDs;
         }
+        // if requested airline has not enough free seat, then return ids of the alternative airlines
         else {
             int alternativeAirlineID=1;
             airlines=DatabaseController.readFile(new File("Airlines.txt"));
@@ -157,6 +178,7 @@ public class AirlineController implements Runnable{
         }
     }
 
+    // check airline has enough free seat in specified dates. Return true or false
     private boolean checkTargetAndDates(ArrayList <String> dates, HashMap<Integer, HashMap> data, int numberOfTraveller, int hotelID) {
         int freeSeat;
         // we have 2 dates so there are 2 flags for each dates. In each match, just one flag set to 'true'
@@ -183,6 +205,7 @@ public class AirlineController implements Runnable{
         return flag1 && flag2;
     }
 
+    // thread is running and airline controller behaves as a server
     @Override
     public void run() {
         System.out.println("Airline server is opening...");

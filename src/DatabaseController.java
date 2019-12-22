@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -50,6 +49,9 @@ public class DatabaseController {
         return data;
     }
 
+    // update file
+    // checks date and find the relevant row
+    // then update full room/seat in the row
     public static void updateFile(File fileName, String date, int travellerCount) {
         try {
             // input the file content to the StringBuffer "input"
@@ -57,10 +59,11 @@ public class DatabaseController {
             StringBuffer inputBuffer = new StringBuffer();
             String line;
 
+            // read each line
             while ((line = file.readLine()) != null) {
                 String[] separatedLine = line.split(",");
                 if (separatedLine[2].equals(date)) {    // update line
-                    separatedLine[3]=String.valueOf(Integer.parseInt(separatedLine[3])+travellerCount); // full room updated
+                    separatedLine[3]=String.valueOf(Integer.parseInt(separatedLine[3])+travellerCount); // full room/seat updated
                     inputBuffer.append(separatedLine[0]+","+separatedLine[1]+","+separatedLine[2]+","+separatedLine[3]+","+separatedLine[4]);
                     inputBuffer.append('\n');
                 }
@@ -72,10 +75,7 @@ public class DatabaseController {
 
             file.close();
             String inputStr = inputBuffer.toString();
-
-            //System.out.println(inputStr); // display the original file for debugging
-
-            // write the new string with the replaced line OVER the same file
+            // write the new string with the replaced line over the same file
             FileOutputStream fileOut = new FileOutputStream(fileName.getName());
             fileOut.write(inputStr.getBytes());
             fileOut.close();

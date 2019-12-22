@@ -18,6 +18,7 @@ public class TravelAgency implements Runnable {
     public TravelAgency() {
     }
 
+    // open socket
     public void start(int port) {
         System.out.println("Server opened!\n");
         try {
@@ -46,6 +47,9 @@ public class TravelAgency implements Runnable {
 
     public void sendInitialMessage() {
         try {
+            // HTTP request methods for getting all hotels and airlines
+            // First one is for hotel
+            // Second one is for airlines
             out2.println("GET " + "/getAllHotels" + " HTTP/1.1");
             out2.println("Host: " + this.host);
             out2.println("User-Agent: Travel Agency");
@@ -62,6 +66,7 @@ public class TravelAgency implements Runnable {
             out3.println("Connection: close");
             out3.println();
 
+            // Getting HTTP response from hotels and airlines controllers, below
             String inputLineHotel, inputLineAirline;
             String responseHotel="", responseAirline="";
             while ((inputLineHotel=in2.readLine()) != null && !inputLineHotel.isEmpty()) {
@@ -96,6 +101,9 @@ public class TravelAgency implements Runnable {
         String dateEnd = dataArr[4];
 
         try {
+            // HTTP request methods for trip request
+            // First one is for hotel
+            // Second one is for airlines
             out2.println("GET " + "/checkHotelSituation" + " HTTP/1.1");
             out2.println("Host: " + this.host);
             out2.println("User-Agent: Travel Agency");
@@ -121,6 +129,7 @@ public class TravelAgency implements Runnable {
             out3.println("Date-End: " + dateEnd);
             out3.println();
 
+            // Getting HTTP response from hotels and airlines controllers, below
             String inputLineHotel, inputLineAirline;
             String responseHotel="", responseAirline="";
             while ((inputLineHotel=in2.readLine()) != null && !inputLineHotel.isEmpty()) {
@@ -133,6 +142,10 @@ public class TravelAgency implements Runnable {
             }
             System.out.println(responseAirline);    // Displaying HTTP response content
 
+            // Check responses what includes.
+            // They may include all hotels and airlines.
+            // They may include hotel and airline IDs that proper for preferred hotels and airlines. It used for trip request
+            // They may includes alternative hotel and airline IDs. It used for trip request.
             if (responseHotel.contains("Hotels:")) {
                 this.hotelsPart = responseHotel.substring(responseHotel.indexOf("Hotels: ")+8, responseHotel.indexOf("}")+1);
             }
@@ -166,18 +179,20 @@ public class TravelAgency implements Runnable {
         }
     }
 
+    // sending confirmation request to hotels and airlines controller
     public void sendConfirmationMessage(String hotelPart, String airlinePart, String dateStartPart, String dateEndPart, String numberOfTraveller) {
+        // parsing data
         int hotelID = Integer.parseInt(hotelPart.substring(hotelPart.indexOf("Hotel-ID: ")+10, hotelPart.length()));
         int airlineID = Integer.parseInt(airlinePart.substring(airlinePart.indexOf("Airline-ID: ")+12, airlinePart.length()));
         String dateStart = dateStartPart.substring(dateStartPart.indexOf("Date-Start: ")+12, dateStartPart.length());
         String dateEnd = dateEndPart.substring(dateEndPart.indexOf("Date-End: ")+10, dateEndPart.length());
         int travellerCount = Integer.parseInt(numberOfTraveller.substring(numberOfTraveller.indexOf("Traveller-Count: ")+17), numberOfTraveller.length());
 
-/*        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        System.out.println(dateStart);
-        System.out.println(dateEnd);
-        System.out.println(travellerCount);*/
         try {
+            // HTTP request methods for confirmation
+            // First one is for hotel
+            // Second one is for airlines
+
             out2.println("GET " + "/confirmHotel" + " HTTP/1.1");
             out2.println("Host: " + this.host);
             out2.println("User-Agent: Travel Agency");
@@ -202,6 +217,7 @@ public class TravelAgency implements Runnable {
             out3.println("Date-End: " + dateEnd);
             out3.println();
 
+            // Getting HTTP response from hotels and airlines controllers, below
             String inputLineHotel, inputLineAirline;
             String responseHotel="", responseAirline="";
             while ((inputLineHotel=in2.readLine()) != null && !inputLineHotel.isEmpty()) {
@@ -218,39 +234,43 @@ public class TravelAgency implements Runnable {
         }
     }
 
-
+    // wait request
     public void getRequest() {
         while(true) {
             try {
-                clientSocket = serverSocket.accept();
+                clientSocket = serverSocket.accept(); // match client socket
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 String inputLine;
                 String response="";
 
+                // There are 3 different scenario
+                // first login: true means get all hotels and airlines. We do not need other data
+                // first login: false means that trip detail request
+                // confirmation flag true means that we need to update databases
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     if (inputLine.equals("First-Login: true")) {
-
                         startClientConnection();    // start connection
-                        sendInitialMessage();     // send message
+                        sendInitialMessage();     // send initial message. It gets all hotels and airlines
                         stopClientConnection();
-
+                        // hotels and airlines are putted in response
                         response += "Hotels: " + this.hotelsPart + "\r\n" + "Airlines: " + this.airlinesPart + "\r\n";
                         this.firstLoginFlag=true;
                         break;
                     }
                     else if (inputLine.equals("First-Login: false")) {
-
                         startClientConnection();
+                        // we just need a data located in header after 'first login' header
                         sendMessage(in.readLine());
                         stopClientConnection();
-
+                        // after trip request, hotelID and airlineID are putted in response
                         response += this.hotelsPart + "\r\n" + this.airlinesPart + "\r\n";
                         this.firstLoginFlag=false;
                     }
                     else if (inputLine.equals("Confirmation-Flag: true")) {
                         // after confirmation flag, hotelID, airlineID, dateStart, dateEnd and travellerCount headers comes respectively
+                        // this headers sent to 'sendConfirmationMessage' method to update
                         startClientConnection();
                         sendConfirmationMessage(in.readLine(), in.readLine(), in.readLine(), in.readLine(), in.readLine());
                         response += "Update Status: Successful\r\n";
@@ -258,6 +278,7 @@ public class TravelAgency implements Runnable {
                         break;
                     }
                 }
+                // HTTP response headers
                 out.println("HTTP/1.1 200 OK");
                 out.println("Date: " + new Date());
                 out.println("Server: Travel Agency");
@@ -270,6 +291,7 @@ public class TravelAgency implements Runnable {
         }
     }
 
+    // stop server socket
     public void stop() {
         try {
             System.out.println("\nServer closed");
@@ -283,6 +305,7 @@ public class TravelAgency implements Runnable {
         }
     }
 
+    // stop client connection
     public void stopClientConnection() {
         try {
             // Close Hotel Socket
@@ -298,6 +321,8 @@ public class TravelAgency implements Runnable {
         }
     }
 
+    // thread is running and travel agency behaves as a server
+    // Call 2 functions that will start hotelServer and AirlineServer
     @Override
     public void run() {
         System.out.println("Server is opening...");
@@ -306,12 +331,14 @@ public class TravelAgency implements Runnable {
         start(8070);
     }
 
+    // start hotel server
     public void startHotelServer() {
         hotelServer = new HotelController();
         hotelServerThread = new Thread(hotelServer);
         hotelServerThread.start();
     }
 
+    // start airline server
     public void startAirlineServer() {
         airlineServer = new AirlineController();
         airlineServerThread = new Thread(airlineServer);

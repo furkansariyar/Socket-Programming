@@ -28,8 +28,9 @@ public class Client {
     // Controlled with a flag to separate request message and confirmation message
     public String sendMessage(TripDetail tripDetail, boolean confirmationFlag) {
 
+        // for confirmation request
         if (confirmationFlag) {
-
+            // Our new protocol headers filled as below
             out.println("NEW-PROTOCOL/1.1");
             out.println("Host: " + this.host);
             out.println("User-Agent: Client");
@@ -43,6 +44,7 @@ public class Client {
             out.println("Traveller-Count: " + tripDetail.getNumberOfTravellers());
             out.println();
         }
+        // For first login operation and sending trip request
         else {
             // Data comes from trip detail is converted to this format below.
             // And then putted in data header in protocol
@@ -52,6 +54,7 @@ public class Client {
                     tripDetail.dateStart+"," +
                     tripDetail.dateEnd+"\r\n";
 
+            // Our new protocol headers filled as below
             out.println("NEW-PROTOCOL/1.1");
             out.println("Host: " + this.host);
             out.println("User-Agent: Client");
@@ -63,7 +66,6 @@ public class Client {
             out.println("Data: " + message);
             out.println();
         }
-
 
         // Data comes from travel agency is putted in 'response' string
         String resp = null;
