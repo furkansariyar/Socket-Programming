@@ -32,7 +32,12 @@ public class GUI extends JFrame {
         hotelComboBox.setBounds(50, 50,90,20);
         airlineComboBox.setBounds(50, 50,90,20);
 
+        JLabel hotelLabel = new JLabel("Hotels");
+        JLabel airlineLabel = new JLabel("Airlines");
+
+        jPanel.add(hotelLabel);
         jPanel.add(hotelComboBox);
+        jPanel.add(airlineLabel);
         jPanel.add(airlineComboBox);
 
         JLabel numberOfTravellersLabel = new JLabel("Number of Travellers");
@@ -80,16 +85,34 @@ public class GUI extends JFrame {
         tripSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (dateCheck(entranceDate.getText()) && dateCheck(exitDate.getText()) && integerCheck(numberOfTravellersField.getText())){
+                int checkCounter = 0;
+                if (dateCheck(entranceDate.getText()))
+                    checkCounter++;
+                else
+                    JOptionPane.showMessageDialog(null, "Entered a invalid date for entrance date!", "InfoBox: " + "INVALID DATE", JOptionPane.ERROR_MESSAGE);
+
+                if (dateCheck(exitDate.getText()))
+                    checkCounter++;
+                else
+                    JOptionPane.showMessageDialog(null, "Entered a invalid date for exit date!", "InfoBox: " + "INVALID DATE", JOptionPane.ERROR_MESSAGE);
+
+                if (integerCheck(numberOfTravellersField.getText())){
+                    checkCounter++;
+                    if (numberOfTravellersCheck(Integer.parseInt(numberOfTravellersField.getText())))
+                        checkCounter++;
+                    else
+                        JOptionPane.showMessageDialog(null, "Entered a invalid number for travellers!", "InfoBox: " + "INVALID NUMBER OF TRAVELLERS", JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "Entered a invalid number for travellers!", "InfoBox: " + "INVALID NUMBER OF TRAVELLERS", JOptionPane.ERROR_MESSAGE);
+
+                if (checkCounter==4){
                     getHotelIDFromString(hotelComboBox.getSelectedItem().toString());
                     getAirlineIDFromString(airlineComboBox.getSelectedItem().toString());
                     dateStart = entranceDate.getText();
                     dateEnd = exitDate.getText();
                     travellerCount = Integer.parseInt(numberOfTravellersField.getText());
                     Main.createClient(client,gui);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Entered a invalid date for!", "InfoBox: " + "INVALID DATE", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -99,7 +122,7 @@ public class GUI extends JFrame {
         int confirmationHotelID = client.getHotelID();
         int confirmationAirlineID = client.getAirlineID();
         String confirmationHotelName = hotelsMap.get(confirmationHotelID);
-        String confirmationAirlineName = hotelsMap.get(confirmationAirlineID);
+        String confirmationAirlineName = airlinesMap.get(confirmationAirlineID);
 
         int result = JOptionPane.showConfirmDialog(null,"Do you want to confirm this trip?\n" + "Hotel: " +
                         confirmationHotelName + "\n Airline: " + confirmationAirlineName, "TRIP CONFIRM",
@@ -115,12 +138,19 @@ public class GUI extends JFrame {
     private boolean integerCheck(String number){
         try
         {
-            Integer.parseInt(number);
+            int integer = Integer.parseInt(number);
             return true;
         } catch (NumberFormatException ex)
         {
             return false;
         }
+    }
+
+    private boolean numberOfTravellersCheck(int number){
+        if (number > 0){
+            return true;
+        }
+        return false;
     }
 
     private boolean dateCheck(String date){
