@@ -96,6 +96,14 @@ public class Client {
         this.firstLoginFlag = firstLoginFlag;
     }
 
+    public int getHotelID() {
+        return hotelID;
+    }
+
+    public int getAirlineID() {
+        return airlineID;
+    }
+
     public void setHotelID(int hotelID) {
         this.hotelID = hotelID;
     }

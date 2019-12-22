@@ -1,5 +1,7 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -11,25 +13,30 @@ public class Main {
 
     public static void main(String[] args) {
         startServer();
-        createClient();
-        //createClient();
+        Client client = createAndstartClientConnection();
+        String response = getAllHotelsAndAirlines(client);
+        GUI gui = new GUI(parseFirstResponse(response).get(0), parseFirstResponse(response).get(1), client);
+        gui.operation();
+        //createClient(client, gui);
     }
 
-    public static void createClient() {
-        int hotelID=0, airlineID=0;
-        String dateStart, dateEnd;
-
+    public static Client createAndstartClientConnection(){
         Client client = new Client();
         client.startConnection(host, 8070);
         client.setFirstLoginFlag(true);
+        return client;
+    }
 
-        // Get all hotels and airlines
-        //System.out.println("Get All Hotels and Airlines");
+    public static String getAllHotelsAndAirlines(Client client){
         String response=client.sendMessage(new TripDetail(0, 0, 0, "", ""), false);
         System.out.println("Server:\n" + response);
 
         client.stopConnection();
 
+        return response;
+    }
+
+    public static List<HashMap<Integer, String>> parseFirstResponse(String response){
         String hotelsPart = response.substring(response.indexOf("Hotels: ")+9, response.indexOf("}"));
         String airlinesPart = response.substring(response.indexOf("Airlines: ")+11, response.length()-3);
         HashMap<Integer, String> hotelsMap = new HashMap<Integer, String>();
@@ -41,25 +48,30 @@ public class Main {
         airlinesMap.put(1, airlinesPart.substring(2, airlinesPart.indexOf(",")));
         airlinesMap.put(2, airlinesPart.substring(airlinesPart.indexOf("2")+2, airlinesPart.length()));
 
-        GUI gui = new GUI(hotelsMap, airlinesMap);
-        hotelID=gui.getHotelID();
-        airlineID=gui.getAirlineID();
-        dateStart=gui.getDateStart();
-        dateEnd=gui.getDateEnd();
+        List<HashMap<Integer, String>> mapList = new ArrayList<HashMap<Integer, String>>();
+        mapList.add(hotelsMap);
+        mapList.add(airlinesMap);
 
-        //todo: BU KALICI DEĞİL
-        hotelID=1;
-        airlineID=1;
-        dateStart="18.12.2019";
-        dateEnd="19.12.2019";
+        return mapList;
+    }
 
-        TripDetail tripDetail = new TripDetail(1, airlineID, hotelID, dateStart, dateEnd);
-        clientRequest(client, tripDetail);
+    public static void createClient(Client client, GUI gui) {
+        /*//todo: BU KALICI DEĞİL
+        int hotelID=1;
+        int airlineID=1;
+        String dateStart="18.12.2019";
+        String dateEnd="19.12.2019";
+        int travellerCount=1;
+
+        TripDetail tripDetail = new TripDetail(1, airlineID, hotelID, dateStart, dateEnd);*/
+
+        TripDetail tripDetail = new TripDetail(gui.getTravellerCount(), gui.getAirlineID(), gui.getHotelID(), gui.getDateStart(), gui.getDateEnd());
+        clientRequest(client, tripDetail, gui);
 
         //server.stop();
     }
 
-    private static void clientRequest(Client client, TripDetail tripDetail) {
+    private static void clientRequest(Client client, TripDetail tripDetail, GUI gui) {
         client.setFirstLoginFlag(false);
         client.startConnection(host, 8070);
         /*System.out.println("Client: " + tripDetail.numberOfTravellers + " " + tripDetail.preferredAirline + " "
@@ -67,16 +79,17 @@ public class Main {
         String response=client.sendMessage(tripDetail, false);
         System.out.println("Server: \n" + response);
         client.stopConnection();
-        confirmation(client, response); // confirmation method called. Its parameter is server response
+        confirmation(client, response, gui); // confirmation method called. Its parameter is server response
     }
 
-    private static void confirmation(Client client, String data) {
+    private static void confirmation(Client client, String data, GUI gui) {
         String hotelID = data.substring(data.indexOf("Hotel-ID: ")+10, data.indexOf("Hotel-Suggestion:")-2);
         String airlineID = data.substring(data.indexOf("Airline-ID: ")+12, data.indexOf("Airline-Suggestion:")-2);
         // TODO: guiye tekrar gidecek okay veya cancel donecek. okay gelirse devam et, cancel gelirse bir sey yapmaya gerek yok
         client.setHotelID(Integer.parseInt(hotelID));
         client.setAirlineID(Integer.parseInt(airlineID));
         confirmationRequest(client);
+        gui.responseConfirmation(client);
     }
 
     private static void confirmationRequest(Client client) {

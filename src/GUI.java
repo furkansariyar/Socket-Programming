@@ -8,17 +8,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GUI extends JFrame {
-    int hotelID, airlineID;
-    String dateStart, dateEnd;
-    HashMap<Integer, String> hotelsMap, airlinesMap;
+    private int hotelID, airlineID, travellerCount;
+    private String dateStart, dateEnd;
+    private HashMap<Integer, String> hotelsMap, airlinesMap;
+    Client client;
 
-    public GUI(HashMap<Integer, String> hotelsMap, HashMap<Integer, String> airlinesMap) {
+    public GUI(HashMap<Integer, String> hotelsMap, HashMap<Integer, String> airlinesMap, Client client) {
         this.hotelsMap = hotelsMap;
         this.airlinesMap = airlinesMap;
-        operation();
+        this.client=client;
+        //operation();
     }
 
-    private void operation() {
+    public void operation() {
         setLayout(new FlowLayout());
 
         JPanel jPanel = new JPanel();
@@ -61,7 +63,7 @@ public class GUI extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
+        GUI gui = this;
 
         hotelComboBox.addActionListener (new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -78,19 +80,47 @@ public class GUI extends JFrame {
         tripSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (dateCheck(entranceDate.getText()) && dateCheck(exitDate.getText())){
+                if (dateCheck(entranceDate.getText()) && dateCheck(exitDate.getText()) && integerCheck(numberOfTravellersField.getText())){
+                    getHotelIDFromString(hotelComboBox.getSelectedItem().toString());
+                    getAirlineIDFromString(airlineComboBox.getSelectedItem().toString());
                     dateStart = entranceDate.getText();
                     dateEnd = exitDate.getText();
-                    Main.createClient();
+                    travellerCount = Integer.parseInt(numberOfTravellersField.getText());
+                    Main.createClient(client,gui);
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "Entered a invalid date for!", "InfoBox: " + "INVALID DATE", JOptionPane.ERROR_MESSAGE);
                 }
-
-
-
             }
         });
+    }
+
+    public void responseConfirmation(Client client){
+        int confirmationHotelID = client.getHotelID();
+        int confirmationAirlineID = client.getAirlineID();
+        String confirmationHotelName = hotelsMap.get(confirmationHotelID);
+        String confirmationAirlineName = hotelsMap.get(confirmationAirlineID);
+
+        int result = JOptionPane.showConfirmDialog(null,"Do you want to confirm this trip?\n" + "Hotel: " +
+                        confirmationHotelName + "\n Airline: " + confirmationAirlineName, "TRIP CONFIRM",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if(result == JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null, "You selected YES!", "InfoBox: " + "CONFIRM", JOptionPane.INFORMATION_MESSAGE);
+        }else if (result == JOptionPane.NO_OPTION) {
+            JOptionPane.showMessageDialog(null, "You selected NO!", "InfoBox: " + "CONFIRM", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private boolean integerCheck(String number){
+        try
+        {
+            Integer.parseInt(number);
+            return true;
+        } catch (NumberFormatException ex)
+        {
+            return false;
+        }
     }
 
     private boolean dateCheck(String date){
@@ -155,6 +185,14 @@ public class GUI extends JFrame {
 
     public void setDateEnd(String dateEnd) {
         this.dateEnd = dateEnd;
+    }
+
+    public int getTravellerCount() {
+        return travellerCount;
+    }
+
+    public void setTravellerCount(int travellerCount) {
+        this.travellerCount = travellerCount;
     }
 
     @Override
