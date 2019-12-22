@@ -166,14 +166,17 @@ public class TravelAgency implements Runnable {
         }
     }
 
-/*    public void sendConfirmationMessage(String hotelPart, String airlinePart) {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-
+    public void sendConfirmationMessage(String hotelPart, String airlinePart, String dateStartPart, String dateEndPart, String numberOfTraveller) {
         int hotelID = Integer.parseInt(hotelPart.substring(hotelPart.indexOf("Hotel-ID: ")+10, hotelPart.length()));
         int airlineID = Integer.parseInt(airlinePart.substring(airlinePart.indexOf("Airline-ID: ")+12, airlinePart.length()));
-        System.out.println(hotelID);
-        System.out.println(airlineID);
+        String dateStart = dateStartPart.substring(dateStartPart.indexOf("Date-Start: ")+12, dateStartPart.length());
+        String dateEnd = dateEndPart.substring(dateEndPart.indexOf("Date-End: ")+10, dateEndPart.length());
+        int travellerCount = Integer.parseInt(numberOfTraveller.substring(numberOfTraveller.indexOf("Traveller-Count: ")+17), numberOfTraveller.length());
 
+/*        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        System.out.println(dateStart);
+        System.out.println(dateEnd);
+        System.out.println(travellerCount);*/
         try {
             out2.println("GET " + "/confirmHotel" + " HTTP/1.1");
             out2.println("Host: " + this.host);
@@ -181,6 +184,10 @@ public class TravelAgency implements Runnable {
             out2.println("Accept: text/html");
             out2.println("Accept-Language: en-US");
             out2.println("Connection: close");
+            out2.println("HotelID: " + hotelID);
+            out2.println("Traveller-Count: " + travellerCount);
+            out2.println("Date-Start: " + dateStart);
+            out2.println("Date-End: " + dateEnd);
             out2.println();
 
             out3.println("GET " + "/confirmAirline" + " HTTP/1.1");
@@ -189,9 +196,13 @@ public class TravelAgency implements Runnable {
             out3.println("Accept: text/html");
             out3.println("Accept-Language: en-US");
             out3.println("Connection: close");
+            out3.println("AirlineID: " + airlineID);
+            out3.println("Traveller-Count: " + travellerCount);
+            out3.println("Date-Start: " + dateStart);
+            out3.println("Date-End: " + dateEnd);
             out3.println();
 
-*//*            String inputLineHotel, inputLineAirline;
+            String inputLineHotel, inputLineAirline;
             String responseHotel="", responseAirline="";
             while ((inputLineHotel=in2.readLine()) != null && !inputLineHotel.isEmpty()) {
                 responseHotel+=inputLineHotel+"\r\n";
@@ -202,20 +213,10 @@ public class TravelAgency implements Runnable {
                 responseAirline+=inputLineAirline+"\r\n";
             }
             System.out.println(responseAirline);    // Displaying HTTP response content
-
-            if (responseHotel.contains("Hotels:")) {
-                this.hotelsPart = responseHotel.substring(responseHotel.indexOf("Hotels: ")+8, responseHotel.indexOf("}")+1);
-            }
-
-            if (responseAirline.contains("Airlines:")) {
-                this.airlinesPart = responseAirline.substring(responseAirline.indexOf("Airlines: ")+10, responseAirline.indexOf("}")+1);
-            }*//*
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    }*/
+    }
 
 
     public void getRequest() {
@@ -249,8 +250,12 @@ public class TravelAgency implements Runnable {
                         this.firstLoginFlag=false;
                     }
                     else if (inputLine.equals("Confirmation-Flag: true")) {
-                        // after confirmation flag, hotelID and airlineID headers comes respectively
-                        //sendConfirmationMessage(in.readLine(), in.readLine());
+                        // after confirmation flag, hotelID, airlineID, dateStart, dateEnd and travellerCount headers comes respectively
+                        startClientConnection();
+                        sendConfirmationMessage(in.readLine(), in.readLine(), in.readLine(), in.readLine(), in.readLine());
+                        response += "Update Status: Successful\r\n";
+                        stopClientConnection();
+                        break;
                     }
                 }
                 out.println("HTTP/1.1 200 OK");

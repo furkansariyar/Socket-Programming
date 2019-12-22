@@ -50,7 +50,7 @@ public class DatabaseController {
         return data;
     }
 
-    public static void updateFile(File fileName, String newData) {
+    public static void updateFile(File fileName, String date, int travellerCount) {
         try {
             // input the file content to the StringBuffer "input"
             BufferedReader file = new BufferedReader(new FileReader(fileName.getName()));
@@ -58,15 +58,22 @@ public class DatabaseController {
             String line;
 
             while ((line = file.readLine()) != null) {
-                inputBuffer.append(line);
-                inputBuffer.append('\n');
+                String[] separatedLine = line.split(",");
+                if (separatedLine[2].equals(date)) {    // update line
+                    separatedLine[3]=String.valueOf(Integer.parseInt(separatedLine[3])+travellerCount); // full room updated
+                    inputBuffer.append(separatedLine[0]+","+separatedLine[1]+","+separatedLine[2]+","+separatedLine[3]+","+separatedLine[4]);
+                    inputBuffer.append('\n');
+                }
+                else {  // other line does not change
+                    inputBuffer.append(line);
+                    inputBuffer.append('\n');
+                }
             }
-            inputBuffer.append(newData);
 
             file.close();
             String inputStr = inputBuffer.toString();
 
-            System.out.println(inputStr); // display the original file for debugging
+            //System.out.println(inputStr); // display the original file for debugging
 
             // write the new string with the replaced line OVER the same file
             FileOutputStream fileOut = new FileOutputStream(fileName.getName());

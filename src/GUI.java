@@ -134,7 +134,7 @@ public class GUI extends JFrame {
         try {
             Date entranceDate = dateFormat.parse(entranceStr);
             Date exitDate = dateFormat.parse(exitStr);
-            if (exitDate.compareTo(entranceDate) > 1){
+            if (exitDate.compareTo(entranceDate) > 0){
                 return true;
             }
         } catch (ParseException e) {

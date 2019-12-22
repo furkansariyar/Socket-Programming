@@ -36,7 +36,7 @@ public class AirlineController implements Runnable{
                 String request="";
                 String response="";
                 String data="";
-                boolean checkAirlineFlag=false;
+                boolean checkAirlineFlag=false, confirmAirlineFlag=false;
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     request+=inputLine+"\r\n";
                 }
@@ -48,6 +48,9 @@ public class AirlineController implements Runnable{
                 }
                 else if (requestType.equals("checkAirlineSituation")) {
                     checkAirlineFlag=true;
+                }
+                else if (requestType.equals("confirmAirline")) {
+                    confirmAirlineFlag=true;
                 }
                 else { }
 
@@ -80,6 +83,9 @@ public class AirlineController implements Runnable{
                         response += "Airline-Suggestion: true\r\n";
                     }
                 }
+                else if (confirmAirlineFlag) {
+                    response+="Airline-Updated: "+confirmAirline(request.substring(request.indexOf("AirlineID:"), request.length()-2))+"\r\n";
+                }
 
                 out.println("HTTP/1.1 200 OK");
                 out.println("Date: " + new Date());
@@ -95,6 +101,22 @@ public class AirlineController implements Runnable{
                 e.printStackTrace();
             }
         }
+    }
+
+    private String confirmAirline(String request) {
+        ArrayList<String> dates = new ArrayList<String>();
+        int airlineID=Integer.parseInt(request.substring(request.indexOf("AirlineID:")+11, request.indexOf("Traveller-Count:")-2));
+        int numberOfTraveller=Integer.parseInt(request.substring(request.indexOf("Traveller-Count:")+17, request.indexOf("Date-Start")-2));
+        String dateStart=request.substring(request.indexOf("Date-Start:")+12, request.indexOf("Date-End:")-2);
+        String dateEnd=request.substring(request.indexOf("Date-End:")+10, request.length());
+        dates.add(dateStart);   // date of departure
+        dates.add(dateEnd);     // date of arrival
+
+        for (int i=0; i<dates.size(); i++) {
+            DatabaseController.updateFile(new File("AirlineDetail_"+airlineID+".txt"), dates.get(i), numberOfTraveller);
+        }
+
+        return "OK";
     }
 
     private ArrayList<Integer> checkAirline(String request) {

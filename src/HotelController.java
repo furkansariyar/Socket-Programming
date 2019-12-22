@@ -36,7 +36,7 @@ public class HotelController implements Runnable{
                 String request="";
                 String response="";
                 String data="";
-                boolean checkHotelFlag=false;
+                boolean checkHotelFlag=false, confirmHotelFlag=false;
                 while ((inputLine=in.readLine()) != null && !inputLine.isEmpty()) {
                     request+=inputLine+"\r\n";
                 }
@@ -48,6 +48,9 @@ public class HotelController implements Runnable{
                 }
                 else if(requestType.equals("checkHotelSituation")) {
                     checkHotelFlag=true;
+                }
+                else if (requestType.equals("confirmHotel")) {
+                    confirmHotelFlag=true;
                 }
                 else { }
 
@@ -80,6 +83,9 @@ public class HotelController implements Runnable{
                         response += "Hotel-Suggestion: true\r\n";
                     }
                 }
+                else if (confirmHotelFlag) {
+                    response+="Hotel-Updated: "+confirmHotel(request.substring(request.indexOf("HotelID:"), request.length()-2))+"\r\n";
+                }
 
                 out.println("HTTP/1.1 200 OK");
                 out.println("Date: " + new Date());
@@ -95,6 +101,25 @@ public class HotelController implements Runnable{
                 e.printStackTrace();
             }
         }
+    }
+
+    private String confirmHotel(String request) {
+        ArrayList<String> dates = new ArrayList<String>();
+        int hotelID=Integer.parseInt(request.substring(request.indexOf("HotelID:")+9, request.indexOf("Traveller-Count:")-2));
+        int numberOfTraveller=Integer.parseInt(request.substring(request.indexOf("Traveller-Count:")+17, request.indexOf("Date-Start")-2));
+        String dateStart=request.substring(request.indexOf("Date-Start:")+12, request.indexOf("Date-End:")-2);
+        String dateEnd=request.substring(request.indexOf("Date-End:")+10, request.length());
+        int startDate_day=Integer.parseInt(dateStart.substring(0,2));
+        while (startDate_day<=Integer.parseInt(dateEnd.substring(0,2))) {
+            dates.add(String.valueOf(startDate_day)+dateStart.substring(2, dateStart.length()));
+            startDate_day++;
+        }
+
+        for (int i=0; i<dates.size(); i++) {
+            DatabaseController.updateFile(new File("HotelDetail_"+hotelID+".txt"), dates.get(i), numberOfTraveller);
+        }
+
+        return "OK";
     }
 
     private ArrayList<Integer> checkHotel(String request) {
