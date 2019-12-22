@@ -3,52 +3,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+// Includes utility methods related Database
 public class DatabaseController {
 
-    private static File hotelsFile;
-    private ArrayList<String> hotels = new ArrayList<String>();
-
-    public DatabaseController(TripDetail tripDetail) {
-        //hotels=readFile(hotelsFile);
-        System.out.println("*-*-*-*-*--*-* " + tripDetail);
-        /*if (tripDetail.preferredHotels.get(0)==hotels.get(0)) {
-            System.out.println("---****----***");
-        }*/
-    }
-
-    public static void UpdateHotels() {
-        hotelsFile = new File("Hotels.txt");
-        createFile(hotelsFile); // checking file is exist or not
-        readFile(hotelsFile);
-        System.out.println("-------------------");
-        //updateFile(hotelsFile, "suvasotel");
-
-    }
-
-    public static void createFile(File file) {
-        try {
-            // if the file does not exist, then create
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
+    // Read file line by line, and each line putted in hashmap
     public static HashMap<Integer, String> readFile(File file) {
         HashMap<Integer, String> data = new HashMap<Integer, String>();
         try {
-            Scanner myReader = new Scanner(file);
-            while (myReader.hasNextLine()) {
-                String line = myReader.nextLine();
-                //System.out.println(line);
-
+            Scanner reader = new Scanner(file);
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
                 String[] separatedLine = line.split(",", 2);
                 data.put(Integer.valueOf(separatedLine[0]), separatedLine[1]);
             }
-            myReader.close();
+            reader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -56,17 +24,16 @@ public class DatabaseController {
         return data;
     }
 
+     /* Read file line by line
+      * Data in row putted in hashmap and this hashmap putted in another hashmap with row id
+      * Return external hashmap
+      */
     public static HashMap<Integer, HashMap> readDetailFile(File file) {
-
         HashMap<Integer, HashMap> data = new HashMap<Integer, HashMap>();
-        //int id;
-
         try {
             Scanner reader = new Scanner(file);
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-                //System.out.println(line);
-                //detailData.clear();
                 HashMap<String, String> detailData = new HashMap<String, String>();
                 String[] separatedLine = line.split(",");
                 detailData.put("Target", separatedLine[1]); // just for airlines
@@ -110,13 +77,4 @@ public class DatabaseController {
             System.out.println("Problem reading file.");
         }
     }
-
-    public void getAllHotel(){
-
-    }
-
-    /*public static void main(String[] args) {
-        UpdateHotels();
-    }*/
-
 }

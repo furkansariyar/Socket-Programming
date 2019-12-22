@@ -10,9 +10,9 @@ public class Client {
     private BufferedReader in;
     private boolean firstLoginFlag;
     private String host="127.0.0.1";
-    // TODO: ports can be defined here
     private int hotelID, airlineID;
 
+    // open socket
     public void startConnection(String ip, int port) {
         try {
             clientSocket = new Socket(ip, port);
@@ -23,6 +23,9 @@ public class Client {
         }
     }
 
+    // Send message to travel agency over tcp socket
+    // Used our new protocol that called NEW-PROTOCOL :)
+    // Controlled with a flag to separate request message and confirmation message
     public String sendMessage(TripDetail tripDetail, boolean confirmationFlag) {
 
         if (confirmationFlag) {
@@ -37,6 +40,8 @@ public class Client {
             out.println();
         }
         else {
+            // Data comes from trip detail is converted to this format below.
+            // And then putted in data header in protocol
             String message = String.valueOf(tripDetail.numberOfTravellers)+"," +
                     tripDetail.preferredAirline+"," +
                     tripDetail.preferredHotel+"," +
@@ -48,11 +53,15 @@ public class Client {
             out.println("User-Agent: Client");
             out.println("Accept: text/html");
             out.println("Accept-Language: en-US");
+            // This 'first login' header checks the message that initial message or not
+            // If it is initial message, data header will be ignored in travel agency server
             out.println("First-Login: " + String.valueOf(this.firstLoginFlag));
-            out.println("Data: " + message); // Sending message to Travel Agency server
+            out.println("Data: " + message);
             out.println();
         }
 
+
+        // Data comes from travel agency is putted in 'response' string
         String resp = null;
         String response = "";
         do {
@@ -60,15 +69,15 @@ public class Client {
                 resp = in.readLine();
                 if(!resp.isEmpty()) {
                     response += resp+"\r\n";
-                    //System.out.println("------- " + resp);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } while (resp!=null && !resp.isEmpty());
-        return response;
+        return response; // return to main class
     }
 
+    // closing socket
     public void stopConnection() {
         try {
             in.close();

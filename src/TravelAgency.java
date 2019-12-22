@@ -10,12 +10,9 @@ public class TravelAgency implements Runnable {
     private BufferedReader in, in2, in3;
     private boolean firstLoginFlag;
     private String host="127.0.0.1";
-    // TODO: ports can be defined here
-
     private static HotelController hotelServer;
     private static AirlineController airlineServer;
     private static Thread hotelServerThread, airlineServerThread;
-
     String hotelsPart="", airlinesPart="";
 
     public TravelAgency() {

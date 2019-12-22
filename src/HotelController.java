@@ -10,9 +10,7 @@ public class HotelController implements Runnable{
     private Socket agencySocket;
     private PrintWriter out;
     private BufferedReader in;
-
     private String host="127.0.0.1";
-    // TODO: ports can be defined here
 
     public HotelController() {
     }
