@@ -10,11 +10,11 @@ public class Main {
 
     public static void main(String[] args) {
         startServer();  // start Travel Agency as a server
-        Client client = createAndstartClientConnection();
-        String response = getAllHotelsAndAirlines(client);
+        Client client = createAndstartClientConnection(); // create client and start create connection
+        String response = getAllHotelsAndAirlines(client); // get all hotels and airlines from database
         // gui started after get all hotels and airlines
         GUI gui = new GUI(parseFirstResponse(response).get(0), parseFirstResponse(response).get(1), client);
-        gui.operation();
+        gui.operation(); // start gui
     }
 
     // Create Client object and start connection with server
